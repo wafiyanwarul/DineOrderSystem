@@ -32,5 +32,3 @@ Dine Order System adalah sebuah aplikasi web untuk mempermudah proses pemesanan 
 Kontribusi sangat kami hargai! Silakan buat pull request atau laporkan masalah melalui [Issues](#).
 
 ---
-
-Deskripsi ini memberikan gambaran yang jelas tentang tujuan, fitur, teknologi, dan cara menggunakan proyek "Dine Order System". Anda bisa menyesuaikannya sesuai dengan kebutuhan spesifik proyek Anda.
