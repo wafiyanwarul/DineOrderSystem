@@ -16,7 +16,7 @@ if ($access_code === 'ADMIN99') {
 
 $password_hashed = password_hash($password, PASSWORD_BCRYPT);
 
-$sql = "INSERT INTO user (username, email, password, access_code, level) VALUES ('" . $username . "','" . $email . "','" . $password . "','" . $access_code . "','" . $level . "')";
+$sql = "INSERT INTO user (username, email, password, access_code, level) VALUES ('" . $username . "','" . $email . "','" . $password_hashed . "','" . $access_code . "','" . $level . "')";
 
 $query = $koneksi->query($sql);
 
