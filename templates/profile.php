@@ -38,6 +38,9 @@ if ($level == 'customer') {
     <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
     <link href="../assets/inspinia/css/style.css" rel="stylesheet">
 
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/ce1fc2061c.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -62,8 +65,7 @@ if ($level == 'customer') {
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="../templates/profile.php">Profile</a></li>
-                                <li><a href="contacts.html">Contacts</a></li>
-                                <li><a href="mailbox.html">Mailbox</a></li>
+                                <li><a href="./dashboard.php">Dashboard</a></li>
                                 <li class="divider"></li>
                                 <li><a href="../templates/login.php">Logout</a></li>
                             </ul>
@@ -72,27 +74,30 @@ if ($level == 'customer') {
                             IN+
                         </div>
                     </li>
+                    <li>
+                        <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label"></span> Home</a>
+                    </li>
                     <!-- Restaurants -->
-                    <li class="active">
-                        <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Restaurants</span> <span class="fa arrow"></span></a>
+                    <li class="#">
+                        <a href="index.html"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span> <span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <li class="active"><a href="index.html">Warunk Genji</a></li>
-                            <li><a href="dashboard_2.html">Alfath Co-working Space</a></li>
-                            <li><a href="dashboard_3.html">Bento Kopi</a></li>
-                            <li><a href="dashboard_4_1.html">Koat Kopi</a></li>
+                            <li class="#"><a href="#">Warunk Genji</a></li>
+                            <li><a href="#">Alfath Co-working Space</a></li>
+                            <li><a href="#">Bento Kopi</a></li>
+                            <li><a href="#">Koat Kopi</a></li>
                         </ul>
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
-                        <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Foods</span></a>
+                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
+                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="mailbox.html">Inbox</a></li>
                             <li><a href="mail_detail.html">Email view</a></li>
@@ -102,53 +107,32 @@ if ($level == 'customer') {
                     </li>
                     <!-- Appetizers -->
                     <li>
-                        <a href="metrics.html"><i class="fa fa-pie-chart"></i> <span class="nav-label">Appetizers</span> </a>
+                        <a href="metrics.html"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
                     </li>
                     <!-- Desserts -->
                     <li>
-                        <a href="widgets.html"><i class="fa fa-flask"></i> <span class="nav-label">Desserts</span></a>
+                        <a href="widgets.html"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
                     </li>
                     <!-- Gallery -->
                     <li>
                         <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="contacts.html">Contacts</a></li>
-                            <li><a href="profile.html">Profile</a></li>
-                            <li><a href="profile_2.html">Profile v.2</a></li>
-                            <li><a href="contacts_2.html">Contacts v.2</a></li>
-                            <li><a href="projects.html">Projects</a></li>
-                            <li><a href="project_detail.html">Project detail</a></li>
-                            <li><a href="activity_stream.html">Activity stream</a></li>
-                            <li><a href="teams_board.html">Teams board</a></li>
-                            <li><a href="social_feed.html">Social feed</a></li>
-                            <li><a href="clients.html">Clients</a></li>
-                            <li><a href="full_height.html">Outlook view</a></li>
-                            <li><a href="vote_list.html">Vote list</a></li>
-                            <li><a href="file_manager.html">File manager</a></li>
-                            <li><a href="calendar.html">Calendar</a></li>
-                            <li><a href="issue_tracker.html">Issue tracker</a></li>
-                            <li><a href="blog.html">Blog</a></li>
-                            <li><a href="article.html">Article</a></li>
-                            <li><a href="faq.html">FAQ</a></li>
-                            <li><a href="timeline.html">Timeline</a></li>
-                            <li><a href="pin_board.html">Pin board</a></li>
                         </ul>
                     </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">Orders</span></a>
+                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
                     <li>
-                        <a href="layouts.html"><i class="fa fa-diamond"></i> <span class="nav-label">History</span></a>
+                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
-                        <a href="#"><i class="fa fa-globe"></i> <span class="nav-label">Ratings</span><span class="label label-info pull-right">NEW</span></a>
+                        <a href="#"><i class="fa-solid fa-star"></i> <span class="nav-label">Ratings</span><span class="label label-info pull-right">NEW</span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="toastr_notifications.html">Notification</a></li>
-                            <li><a href="nestable_list.html">Nestable list</a></li>
-                            <li><a href="agile_board.html">Agile board</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -164,7 +148,7 @@ if ($level == 'customer') {
                         <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                         <form role="search" class="navbar-form-custom" action="search_results.html">
                             <div class="form-group">
-                                <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+                                <input type="text" placeholder="Search for food/drink" class="form-control" name="top-search" id="top-search">
                             </div>
                         </form>
                     </div>
