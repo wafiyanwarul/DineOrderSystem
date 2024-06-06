@@ -12,6 +12,16 @@ include('../includes/db_connect.php');
 
     <title>Dine In Hub | Forgot password</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon_io/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon_io/apple-touch-icon.png">
+
+    <link rel="manifest" href="../assets/favicon_io/site.webmanifest">
+    
+    <!-- Main Favicon -->
+    <link rel="shortcut icon" href="../assets/favicon_io/favicon.ico" type="image/x-icon">
+
     <link href="../assets/inspinia/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
 

@@ -33,6 +33,16 @@ if ($level == 'customer') {
 
     <title>INSPINIA | Profile</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon_io/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon_io/apple-touch-icon.png">
+
+    <link rel="manifest" href="../assets/favicon_io/site.webmanifest">
+
+    <!-- Main Favicon -->
+    <link rel="shortcut icon" href="../assets/favicon_io/favicon.ico" type="image/x-icon">
+
     <link href="../assets/inspinia/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
@@ -74,18 +84,12 @@ if ($level == 'customer') {
                             IN+
                         </div>
                     </li>
-                    <li>
+                    <li class="active">
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label"></span> Home</a>
                     </li>
                     <!-- Restaurants -->
                     <li class="#">
-                        <a href="index.html"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span> <span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li class="#"><a href="#">Warunk Genji</a></li>
-                            <li><a href="#">Alfath Co-working Space</a></li>
-                            <li><a href="#">Bento Kopi</a></li>
-                            <li><a href="#">Koat Kopi</a></li>
-                        </ul>
+                        <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
                     </li>
                     <!-- All Menu -->
                     <li>
@@ -97,13 +101,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="mailbox.html">Inbox</a></li>
-                            <li><a href="mail_detail.html">Email view</a></li>
-                            <li><a href="mail_compose.html">Compose email</a></li>
-                            <li><a href="email_template.html">Email templates</a></li>
-                        </ul>
+                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-success pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -299,19 +297,25 @@ if ($level == 'customer') {
                                     <h4><strong><?php echo htmlspecialchars($username); ?></strong></h4>
                                     <p><i class="fa fa-map-marker"></i> Malang, Indonesia</p>
                                     <h5>
-                                        About me
+                                        <?php echo htmlspecialchars($role) ?>
                                     </h5>
                                     <p>
                                         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitat.
                                     </p>
                                     <div class="user-button">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button>
-                                            </div>
+                                            <?php if ($user == 'customer') { ?>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button>
+                                                </div>
+                                            <?php } else { ?>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
+                                                </div>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>

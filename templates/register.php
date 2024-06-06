@@ -8,11 +8,21 @@
 
     <title>Dine In Hub | Register</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon_io/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicon_io/apple-touch-icon.png">
+
+    <link rel="manifest" href="../assets/favicon_io/site.webmanifest">
+    
+    <!-- Main Favicon -->
+    <link rel="shortcut icon" href="../assets/favicon_io/favicon.ico" type="image/x-icon">
+
     <link rel="stylesheet" href="../assets/inspinia/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assets/inspinia/font-awesome/css/font-awesome.css">
-    <link rel="stylesheet" href="/assets/inspinia/css/plugins/iCheck/custom.css">
-    <link rel="stylesheet" href="/assets/inspinia/css/animate.css">
-    <link rel="stylesheet" href="/assets/inspinia/css/style.css">
+    <link rel="stylesheet" href="../assets/inspinia/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../assets/inspinia/css/plugins/iCheck/custom.css">
+    <link rel="stylesheet" href="../assets/inspinia/css/animate.css">
+    <link rel="stylesheet" href="../assets/inspinia/css/style.css">
 
     <style>
         .password-container {
@@ -99,10 +109,10 @@
                     </div>
                 </div>
                 <!-- Register Button -->
-                <button type="submit" class="btn btn-primary block full-width m-b" id="register-button" disabled>Register</button>
+                <button type="submit" class="btn btn-warning block full-width m-b" id="register-button" disabled>Register</button>
 
                 <p class="text-muted text-center"><small>Already have an account?</small></p>
-                <a class="btn btn-sm btn-white btn-block" href="../templates/login.php">Login</a>
+                <a class="btn btn-sm btn-white btn-block bg-success" href="../templates/login.php">Login</a>
             </form>
             <p class="m-t"> <small>Inspinia we app framework base on Bootstrap 3 &copy; 2014</small> </p>
         </div>

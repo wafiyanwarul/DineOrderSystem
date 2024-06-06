@@ -1,22 +1,23 @@
-<!--
-*
-*  INSPINIA - Responsive Admin Theme
-*  version 2.7
-*
--->
 <?php
 session_start();
 include('../includes/db_connect.php'); // Ganti dengan file koneksi database Anda
-error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if (!isset($_SESSION['username'])) {
     die("<h1><center>Anda belum login</h1></center>");
 }
+
 // Mendapatkan data user dari session atau database
 $username = $_SESSION['username'];
 $sql = "SELECT username, level FROM user WHERE username = '$username'";
 $result = $koneksi->query($sql);
-$user = $result->fetch_assoc();
 
+if (!$result) {
+    die("Error executing query: " . $koneksi->error);
+}
+
+$user = $result->fetch_assoc();
 $username = $user['username'] ?? 'Guest';
 $level = $user['level'] ?? 'unknown';
 
@@ -27,19 +28,32 @@ if ($level == 'customer') {
 } else {
     $role = 'Unknown';
 }
+
+// Mengambil semua data dari tabel restaurant
+$sql_restaurant = "SELECT restaurant_id, restaurant_name, address, phone, description, image FROM restaurant";
+$result_restaurant = $koneksi->query($sql_restaurant);
+
+if (!$result_restaurant) {
+    die("Error executing restaurant query: " . $koneksi->error);
+}
+
+$restaurants = [];
+if ($result_restaurant->num_rows > 0) {
+    while ($row = $result_restaurant->fetch_assoc()) {
+        $restaurants[] = $row;
+    }
+}
 ?>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Dashboard</title>
+    <title>Dine In Hub | Restaurants</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -53,15 +67,14 @@ if ($level == 'customer') {
 
     <link href="../assets/inspinia/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/style.css" rel="stylesheet">
 
     <!-- Toastr style -->
     <link href="../assets/inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
     <!-- Gritter -->
     <link href="../assets/inspinia/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
-
-    <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
-    <link href="../assets/inspinia/css/style.css" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/ce1fc2061c.js" crossorigin="anonymous"></script>
@@ -99,7 +112,7 @@ if ($level == 'customer') {
                     </li>
 
                     <!-- Dashboard - Home -->
-                    <li class="active">
+                    <li>
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
@@ -116,7 +129,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
+                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -127,7 +140,7 @@ if ($level == 'customer') {
                         <a href="widgets.html"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
                     </li>
                     <!-- Gallery -->
-                    <li>
+                    <li class="active">
                         <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
                     </li>
                     <!-- Orders -->
@@ -213,154 +226,71 @@ if ($level == 'customer') {
                     </ul>
                 </nav>
             </div>
-
-            <!-- Header Dashboard -->
+            
+            <!-- Header Content -->
             <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-lg-10">
-                    <h2>Home</h2>
+                <div class="col-sm-4">
+                    <h2>Gallery</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./dashboard.php">Home</a>
+                            <a href="./empty_page.php">Gallery</a>
                         </li>
                         <!-- <li class="active">
-                            <strong>Profile</strong>
+                            <strong>Gallery</strong>
                         </li> -->
                     </ol>
                 </div>
-                <div class="col-lg-2">
-                </div>
-            </div>
-            <?php if ($level == 'admin') { ?>
-                <div class="row wrapper-content">
-                    <div class="col-lg-12 ">
-                        <div class="ibox-title">
-                            <h2>Hi Admin <strong><?php echo htmlspecialchars($username)?></strong>! Welcome to Dine In Hub </h2>
-                        </div>
-                        <div class="ibox-title bg-primary">
-                            <h2><strong>Kelola Sistem Pemesanan Makanan Dine In Anda</strong></h2>
-                        </div>
-                        <div class="ibox-content">
-                            <p>Kelola restoran makanan anda kapanpun, dimanapun. Cmiiw</p>
-                            <div class="row wrapper-content ">
-                                <div class="col-md-4 border-top-bottom p-xs">
-                                    <h3> Manage Restaurants </h3>
-                                    <small>Kelola restoran Anda dengan mudah. Tambahkan, edit, dan hapus informasi restoran untuk memastikan pelanggan mendapatkan pengalaman terbaik</small>
-                                    <a href="./restaurants.php" class="btn btn-info btn-lg btn-block m-t">Manage Restaurants</a>
-                                </div>
-                                <div class="col-md-4 border-top-bottom p-xs">
-                                    <h3> Manage Foods </h3>
-                                    <small>Atur menu makanan dengan fleksibel. Tambahkan berbagai jenis hidangan, perbarui harga, dan pastikan setiap hidangan tersaji sesuai standar restoran Anda</small>
-                                    <a href="#" class="btn btn-warning btn-lg btn-block m-t">Manage Foods</a>
-                                </div>
-                                <div class="col-md-4 border-top-bottom p-xs">
-                                    <h3> Manage Drinks </h3>
-                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="#" class="btn btn-success btn-lg btn-block m-t">Manage Drinks</a>
-                                </div>
-                            </div>
-                        </div>
+                <div class="col-sm-8">
+                    <div class="title-action">
+                        <a href="" class="btn btn-primary">This is action area</a>
                     </div>
-
-                </div>
-        </div>
-
-    <?php } elseif ($level == 'customer') { ?>
-        <div class="row wrapper-content">
-            <div class="col-md-6">
-                <div class="ibox-title dashboard-header">
-                    <h2>Welcome <strong><?php echo htmlspecialchars($username); ?></strong></h2>
-                </div>
-                <div class="ibox-content ">
-                    <small>Here's the step how to order food:</small>
-                    <ul class="list-group clear-list m-t">
-                        <li class="list-group-item fist-item">
-                            <span class="label label-info">1</span> Choose your restaurant
-                        </li>
-                        <li class="list-group-item">
-                            <span class="label label-info">2</span> Choose your menu type
-                        </li>
-                        <li class="list-group-item">
-                            <span class="label label-info">3</span> Choose your detail menu
-                        </li>
-                        <li class="list-group-item">
-                            <span class="label label-info">4</span> Complete your order payment
-                        </li>
-                        <li class="list-group-item">
-                            <span class="label label-info">5</span> Check your payment status
-                        </li>
-                        <li class="list-group-item">
-                            <span class="label label-info">6</span> The kitchen will prepare your order according to the queue
-                        </li>
-                        <li class="list-group-item">
-                            <span class="label label-info">7</span> Your order will be delivered to your table
-                        </li>
-                    </ul>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="ibox-title">
-                    <h2>Welcome <strong>Here is Our Top Menu</strong></h2>
-                </div>
-                <div class="ibox-content ">
-                    <small>Choose your taste</small>
-                </div>
-            </div>
-        </div>
 
-        <div class="row wrapper border-bottom white-bg page-heading bg-info">
-            <div class="col-lg-10">
-                <a class="b-r-xl bg-success" href="./profile.php">
-                    <table>
-
-                        <tr>
-                            <td>
-                                <h2><i class="fa-solid fa-id-card m-r"></i></h2>
-                            </td>
-                            <td>
-                                <h2><strong>See Your Profile</strong></h2>
-                            </td>
-                        </tr>
-                    </table>
-                </a>
-
-            </div>
-        </div>
-    <? } else { ?>
-        <!-- <div class="row">
-                    <div class="col-md-10">
-                        <div class="ibox-title">
-                            Title Section
-                        </div>
-                        <div class="ibox-content">
-                            <h2>Content Section Here</h2>
-                        </div>
+            <!-- Main Content -->
+            <div class="wrapper wrapper-content">
+                <div class="middle-box text-center animated fadeInRightBig">
+                    <h3 class="font-bold">This page is empty</h3>
+                    <div class="error-desc">
+                        You can create here any grid layout you want. And any variation layout you imagine:) Check out
+                        main dashboard and other site. It use many different layout.
+                        <br /><a href="./dashboard.php" class="btn btn-primary btn-block dim m-t">Dashboard</a>
                     </div>
-                </div> -->
-    <?php } ?>
+                </div>
+            </div>
 
-
+            <!-- Footer -->
+            <div class="footer">
+                <div class="pull-right">
+                    10GB of <strong>250GB</strong> Free.
+                </div>
+                <div>
+                    <strong>Copyright</strong> Example Company &copy; 2014-2017
+                </div>
+            </div>
+        </div>
     </div>
-
-
     </div>
-    </div>
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                toastr.success('Gallery Page', 'Dine In Hub');
+
+            }, 1300);
+        });
+    </script>
 
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>
     <script src="../assets/inspinia/js/bootstrap.min.js"></script>
     <script src="../assets/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="../assets/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-    <!-- Flot -->
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.pie.js"></script>
-
-    <!-- Peity -->
-    <script src="../assets/inspinia/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="../assets/inspinia/js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="../assets/inspinia/js/inspinia.js"></script>
@@ -372,33 +302,10 @@ if ($level == 'customer') {
     <!-- GITTER -->
     <script src="../assets/inspinia/js/plugins/gritter/jquery.gritter.min.js"></script>
 
-    <!-- Sparkline -->
-    <script src="../assets/inspinia/js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Sparkline demo data  -->
-    <script src="../assets/inspinia/js/demo/sparkline-demo.js"></script>
-
-    <!-- ChartJS-->
-    <script src="../assets/inspinia/js/plugins/chartJs/Chart.min.js"></script>
-
     <!-- Toastr -->
     <script src="../assets/inspinia/js/plugins/toastr/toastr.min.js"></script>
 
 
-    <script>
-        $(document).ready(function() {
-            setTimeout(function() {
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.success('Hey, Taste Explorer!', 'Welcome to Dine In HUB');
-
-            }, 1300);
-        });
-    </script>
 </body>
 
 </html>
