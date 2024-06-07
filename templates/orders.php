@@ -23,15 +23,17 @@ if ($level == 'customer') {
 }
 ?>
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
+
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Restaurants</title>
+    <title>Dine In Hub | Orders</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -54,12 +56,9 @@ if ($level == 'customer') {
 
     <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
     <link href="../assets/inspinia/css/style.css" rel="stylesheet">
-    <link href="../assets/inspinia/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
-    <link href="../assets/inspinia/css/plugins/codemirror/codemirror.css" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/ce1fc2061c.js" crossorigin="anonymous"></script>
-
 
 </head>
 
@@ -83,7 +82,7 @@ if ($level == 'customer') {
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="../templates/profile.php">Profile</a></li>
-                                <li><a href="contacts.html">Dashboard</a></li>
+                                <li><a href="./dashboard.php">Dashboard</a></li>
                                 <li class="divider"></li>
                                 <li><a href="../templates/logout.php">Logout</a></li>
                             </ul>
@@ -98,8 +97,8 @@ if ($level == 'customer') {
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
-                    <li class="active">
-                        <a href="#"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
+                    <li>
+                        <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
                     </li>
                     <!-- All Menu -->
                     <li>
@@ -107,11 +106,11 @@ if ($level == 'customer') {
                     </li>
                     <!-- Foods -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
+                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -123,17 +122,14 @@ if ($level == 'customer') {
                     </li>
                     <!-- Gallery -->
                     <li>
-                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="contacts.html">Contacts</a></li>
-                        </ul>
+                        <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
                     </li>
                     <!-- Vouchers -->
                     <li>
                         <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Vouchers</span></a>
                     </li>
                     <!-- Orders -->
-                    <li>
+                    <li class="active">
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
@@ -143,9 +139,6 @@ if ($level == 'customer') {
                     <!-- Ratings -->
                     <li>
                         <a href="#"><i class="fa-solid fa-star"></i> <span class="nav-label">Ratings</span><span class="label label-info pull-right">NEW</span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="toastr_notifications.html">Notification</a></li>
-                        </ul>
                     </li>
                 </ul>
 
@@ -222,95 +215,92 @@ if ($level == 'customer') {
             <!-- Header Dashboard -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Restaurants</h2>
+                    <h2>Orders</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./restaurants.php">Restaurants</a>
+                            <a href="./orders.php">Orders</a>
                         </li>
-                        <li class="active">
-                            <strong>Add Restaurant</strong>
-                        </li>
+                        <!-- <li class="active">
+                            <strong>Profile</strong>
+                        </li> -->
                     </ol>
                 </div>
                 <div class="col-lg-2">
                 </div>
             </div>
-            
             <?php if ($level == 'admin') { ?>
-                <div class="wrapper-content animated fadeInRight">
-                    <div class="row">
-                        <div class="col-lg-8 b-r">
-                            <div class="ibox">
-                                <div class="ibox-title bg-success">
-                                    <h1 class="m-t-none m-b">Tambah Restoran</h1>
-                                    <p>Restoran yang ditambahkan akan dapat dilihat di menu customer</p>
-                                </div>
-                                <div class="ibox-content">
-                                    <form action="../actions/add_restaurant_action.php" method="post" enctype="multipart/form-data">
-                                        <div class="form-group">
-                                            <label for="restaurant_name">Nama Restoran:</label>
-                                            <input type="text" id="restaurant_name" name="restaurant_name" class="form-control" placeholder="Enter restaurant name" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="phone">Nomor Telepon:</label>
-                                            <input type="text" id="phone" name="phone" class="form-control" placeholder="Enter phone number" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="address">Alamat:</label>
-                                            <input type="text" id="address" name="address" class="form-control" placeholder="Enter restaurant address" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="description">Deskripsi:</label>
-                                            <textarea id="description" name="description" class="form-control" placeholder="Enter description" required></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="image">Gambar:</label>
-                                            <div class="form-group">
-                                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-                                                    <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" id="file" name="image"></span>
-                                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary btn-block">Tambah Restaurant</button>
-                                    </form>
-                                </div>
-                            </div>
+                <div class="row wrapper-content">
+                    <div class="col-lg-12 ">
+                        <div class="ibox-title">
+                            <h2>Hi <strong><?php echo htmlspecialchars($username) ?></strong></h2>
                         </div>
+                        <div class="ibox-title bg-primary">
+                            <h2>Welcome to <strong>Dine In Hub | Orders Page</strong></h2>
+                        </div>
+                        <div class="ibox-content">
+                            
+                        </div>
+
                     </div>
+
                 </div>
         </div>
 
     <?php } elseif ($level == 'customer') { ?>
+        <div class="row wrapper-content">
+            <div class="col-lg-12">
+                <div class="ibox-title dashboard-header">
+                    <h2>Orders Page | <strong><?php echo htmlspecialchars($username); ?></strong></h2>
+                </div>
+                <div class="ibox-content ">
+                </div>
+            </div>
+        </div>
 
+        <div class="row wrapper border-bottom white-bg page-heading bg-info">
+            <div class="col-lg-10">
+                <a class="b-r-xl bg-success" href="./profile.php">
+                    <table>
+
+                        <tr>
+                            <td>
+                                <h2><i class="fa-solid fa-id-card m-r"></i></h2>
+                            </td>
+                            <td>
+                                <h2><strong>See Your Profile</strong></h2>
+                            </td>
+                        </tr>
+                    </table>
+                </a>
+
+            </div>
+        </div>
     <? } else { ?>
-        <!-- Code if user isn't customer and admin role -->
     <?php } ?>
+
 
     </div>
 
-    <!-- Script for Dropzone File Upload -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/js/fileinput.min.js"></script>
 
-    <!-- Custom and plugin javascript -->
-    <script src="../assets/inspinia/js/inspinia.js"></script>
-    <script src="../assets/inspinia/js/plugins/pace/pace.min.js"></script>
-
-    <!-- Jasny -->
-    <script src="../assets/inspinia/js/plugins/jasny/jasny-bootstrap.min.js"></script>
-
-    <!-- CodeMirror -->
-    <script src="../assets/inspinia/js/plugins/codemirror/codemirror.js"></script>
-    <script src="../assets/inspinia/js/plugins/codemirror/mode/xml/xml.js"></script>
+    </div>
+    </div>
 
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>
     <script src="../assets/inspinia/js/bootstrap.min.js"></script>
     <script src="../assets/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="../assets/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- Flot -->
+    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.js"></script>
+    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.spline.js"></script>
+    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.pie.js"></script>
+
+    <!-- Peity -->
+    <script src="../assets/inspinia/js/plugins/peity/jquery.peity.min.js"></script>
+    <script src="../assets/inspinia/js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="../assets/inspinia/js/inspinia.js"></script>
@@ -322,8 +312,33 @@ if ($level == 'customer') {
     <!-- GITTER -->
     <script src="../assets/inspinia/js/plugins/gritter/jquery.gritter.min.js"></script>
 
+    <!-- Sparkline -->
+    <script src="../assets/inspinia/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+
+    <!-- Sparkline demo data  -->
+    <script src="../assets/inspinia/js/demo/sparkline-demo.js"></script>
+
+    <!-- ChartJS-->
+    <script src="../assets/inspinia/js/plugins/chartJs/Chart.min.js"></script>
+
     <!-- Toastr -->
     <script src="../assets/inspinia/js/plugins/toastr/toastr.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 4000
+                };
+                toastr.success('Orders Page!', 'Dine In HUB');
+
+            }, 1300);
+        });
+    </script>
 </body>
 
 </html>

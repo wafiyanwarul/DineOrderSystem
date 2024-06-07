@@ -143,9 +143,13 @@ if ($result_restaurant->num_rows > 0) {
                     <li class="active">
                         <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
                     </li>
+                    <!-- Vouchers -->
+                    <li>
+                        <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Vouchers</span></a>
+                    </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
+                        <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
                     <li>

@@ -140,14 +140,15 @@ if ($result_food->num_rows > 0) {
                     </li>
                     <!-- Gallery -->
                     <li>
-                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="contacts.html">Contacts</a></li>
-                        </ul>
+                        <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
+                    </li>
+                    <!-- Vouchers -->
+                    <li>
+                        <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Vouchers</span></a>
                     </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
+                        <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
                     <li>
@@ -302,7 +303,7 @@ if ($result_food->num_rows > 0) {
                                                         </a>
                                                         <div class="contact-box-footer">
                                                             <div class="m-t-xs btn-group">
-                                                                <a href="#" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> Edit Food </a>
+                                                                <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> Edit Food </a>
                                                             </div>
                                                         </div>
                                                     </div>

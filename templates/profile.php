@@ -97,7 +97,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Foods -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li>
@@ -118,9 +118,13 @@ if ($level == 'customer') {
                             <li><a href="contacts.html">Contacts</a></li>
                         </ul>
                     </li>
+                    <!-- Vouchers -->
+                    <li>
+                        <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Vouchers</span></a>
+                    </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
+                        <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
                     <li>

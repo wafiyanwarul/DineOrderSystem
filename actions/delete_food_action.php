@@ -8,27 +8,6 @@ if (!isset($_SESSION['username'])) {
     die("<h1><center>Anda belum login</h1></center>");
 }
 
-// Mendapatkan data user dari session atau database
-$username = $_SESSION['username'];
-$sql = "SELECT username, level FROM user WHERE username = '$username'";
-$result = $koneksi->query($sql);
-
-if (!$result) {
-    die("Error executing query: " . $koneksi->error);
-}
-
-$user = $result->fetch_assoc();
-$username = $user['username'] ?? 'Guest';
-$level = $user['level'] ?? 'unknown';
-
-if ($level == 'customer') {
-    $role = 'Customer';
-} else if ($level == 'admin') {
-    $role = 'Admin';
-} else {
-    $role = 'Unknown';
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST['food_ids'])) {
         $food_ids = $_POST['food_ids'];

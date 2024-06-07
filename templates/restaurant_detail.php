@@ -171,9 +171,13 @@ while ($food = $result_foods->fetch_assoc()) {
                             <li><a href="contacts.html">Contacts</a></li>
                         </ul>
                     </li>
+                    <!-- Vouchers -->
+                    <li>
+                        <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Vouchers</span></a>
+                    </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
+                        <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
                     <li>
@@ -385,34 +389,38 @@ while ($food = $result_foods->fetch_assoc()) {
                                         </div>
                                     </form>
                                 </div>
-                                <div class="ibox-title">
-                                    <h2 class="m-b-xs m-b-sm"><strong>Menu</strong></h2>
-                                </div>
-                                <div class="ibox-content">
-                                    <div class="row">
-                                        <?php if (!empty($foods)) : ?>
-                                            <?php foreach ($foods as $food) : ?>
-                                                <div class="col-lg-3">
-                                                    <div class="contact-box center-version">
-                                                        <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
-                                                            <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($food['image'] ?? ''); ?>">
-                                                            <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($food['food_name'] ?? ''); ?></strong></h3>
-                                                            <div class="font-bold"><?php echo htmlspecialchars($food['price'] ?? ''); ?></div>
-                                                            <address class="m-t-md">
-                                                                <p><?php echo htmlspecialchars($food['description'] ?? ''); ?></p>
-                                                            </address>
-                                                        </a>
-                                                        <div class="contact-box-footer">
-                                                            <div class="m-t-xs btn-group">
-                                                                <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Food</a>
+
+                                <div class="ibox float-e-margins">
+                                    <!-- Foods Restaurant Content based on Each Resto ID -->
+                                    <div class="ibox-title bg-warning">
+                                        <h2 class="m-b-xs m-b-sm"><strong>Menu</strong></h2>
+                                    </div>
+                                    <div class="ibox-content">
+                                        <div class="row">
+                                            <?php if (!empty($foods)) : ?>
+                                                <?php foreach ($foods as $food) : ?>
+                                                    <div class="col-lg-3">
+                                                        <div class="contact-box center-version">
+                                                            <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
+                                                                <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($food['image'] ?? ''); ?>">
+                                                                <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($food['food_name'] ?? ''); ?></strong></h3>
+                                                                <div class="font-bold"><?php echo htmlspecialchars($food['price'] ?? ''); ?></div>
+                                                                <address class="m-t-md">
+                                                                    <p><?php echo htmlspecialchars($food['description'] ?? ''); ?></p>
+                                                                </address>
+                                                            </a>
+                                                            <div class="contact-box-footer">
+                                                                <div class="m-t-xs btn-group">
+                                                                    <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Food</a>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        <?php else : ?>
-                                            <p>No foods found for this restaurant.</p>
-                                        <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <p class="m-l-sm m-t-sm">No foods found for this restaurant.</p>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -534,86 +542,3 @@ while ($food = $result_foods->fetch_assoc()) {
 </body>
 
 </html>
-
-<!-- <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>Big gallery carousel</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                            <i class="fa fa-wrench"></i>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-user">
-                                            <li><a href="#">Config option 1</a>
-                                            </li>
-                                            <li><a href="#">Config option 2</a>
-                                            </li>
-                                        </ul>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-                                    <div class="carousel slide" id="carousel3">
-                                        <div class="carousel-inner">
-                                            <div class="item gallery active left">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big2.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big3.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item gallery next left">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big2.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big3.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item gallery">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big2.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big3.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a data-slide="prev" href="#carousel3" class="left carousel-control">
-                                            <span class="icon-prev"></span>
-                                        </a>
-                                        <a data-slide="next" href="#carousel3" class="right carousel-control">
-                                            <span class="icon-next"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div> -->

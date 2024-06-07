@@ -141,14 +141,15 @@ if ($result_restaurant->num_rows > 0) {
                     </li>
                     <!-- Gallery -->
                     <li>
-                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="contacts.html">Contacts</a></li>
-                        </ul>
+                        <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
+                    </li>
+                    <!-- Vouchers -->
+                    <li>
+                        <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
+                        <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Vouchers</span></a>
                     </li>
                     <!-- History -->
                     <li>
@@ -246,8 +247,10 @@ if ($result_restaurant->num_rows > 0) {
                 <div class="col-lg-2">
                 </div>
             </div>
+
+            <!-- View for User Admin Role -->
             <?php if ($level == 'admin') { ?>
-                <div class="row wrapper-content">
+                <div class="wrapper wrapper-content animated-fadeInRight">
                     <div class="col-lg-12">
                         <div class="ibox-title bg-primary">
                             <h2><strong>Dine In Hub | Manage Restaurant </strong></h2>
@@ -291,6 +294,7 @@ if ($result_restaurant->num_rows > 0) {
                 </div>
         </div>
 
+        <!-- View for User Customer Role -->
     <?php } elseif ($level == 'customer') { ?>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">

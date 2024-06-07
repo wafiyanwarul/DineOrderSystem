@@ -11,6 +11,7 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 if (!isset($_SESSION['username'])) {
     die("<h1><center>Anda belum login</h1></center>");
 }
+
 // Mendapatkan data user dari session atau database
 $username = $_SESSION['username'];
 $sql = "SELECT username, level FROM user WHERE username = '$username'";
@@ -130,9 +131,13 @@ if ($level == 'customer') {
                     <li>
                         <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
                     </li>
+                    <!-- Vouchers -->
+                    <li>
+                        <a href="./vouchers.php"><i class="fa-solid fa-ticket"></i> <span class="nav-label">Vouchers</span></a>
+                    </li>
                     <!-- Orders -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
+                        <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
                     <!-- History -->
                     <li>
@@ -230,11 +235,12 @@ if ($level == 'customer') {
                 <div class="col-lg-2">
                 </div>
             </div>
+            <!-- View for User Admin Role -->
             <?php if ($level == 'admin') { ?>
-                <div class="row wrapper-content">
+                <div class="row wrapper-content animated-fadeInRight">
                     <div class="col-lg-12 ">
                         <div class="ibox-title">
-                            <h2>Hi Admin <strong><?php echo htmlspecialchars($username)?></strong>! Welcome to Dine In Hub </h2>
+                            <h2>Hi Admin <strong><?php echo htmlspecialchars($username) ?></strong>! Welcome to Dine In Hub </h2>
                         </div>
                         <div class="ibox-title bg-primary">
                             <h2><strong>Kelola Sistem Pemesanan Makanan Dine In Anda</strong></h2>
@@ -264,8 +270,11 @@ if ($level == 'customer') {
                 </div>
         </div>
 
+        <!-- View for User Customer Role -->
     <?php } elseif ($level == 'customer') { ?>
-        <div class="row wrapper-content">
+
+        <div class="row wrapper border-bottom page-heading">
+
             <div class="col-md-6">
                 <div class="ibox-title dashboard-header">
                     <h2>Welcome <strong><?php echo htmlspecialchars($username); ?></strong></h2>
@@ -298,8 +307,8 @@ if ($level == 'customer') {
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="ibox-title">
-                    <h2>Welcome <strong>Here is Our Top Menu</strong></h2>
+                <div class="ibox-title dashboard-header">
+                    <h2><strong>Here is Our Top Menu</strong></h2>
                 </div>
                 <div class="ibox-content ">
                     <small>Choose your taste</small>
@@ -307,8 +316,13 @@ if ($level == 'customer') {
             </div>
         </div>
 
-        <div class="row wrapper border-bottom white-bg page-heading bg-info">
+        <div class="wrapper wrapper-content fadeInRight bg-info">
             <div class="col-lg-10">
+                <div class="ibox">
+                    <div class="ibox-title">
+
+                    </div>
+                </div>
                 <a class="b-r-xl bg-success" href="./profile.php">
                     <table>
 
@@ -326,22 +340,8 @@ if ($level == 'customer') {
             </div>
         </div>
     <? } else { ?>
-        <!-- <div class="row">
-                    <div class="col-md-10">
-                        <div class="ibox-title">
-                            Title Section
-                        </div>
-                        <div class="ibox-content">
-                            <h2>Content Section Here</h2>
-                        </div>
-                    </div>
-                </div> -->
     <?php } ?>
-
-
     </div>
-
-
     </div>
     </div>
 

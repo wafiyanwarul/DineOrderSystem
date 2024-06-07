@@ -6,25 +6,6 @@ if (!isset($_SESSION['username'])) {
     die("<h1><center>Anda belum login</h1></center>");
 }
 
-// Mendapatkan data user dari session atau database
-$username = $_SESSION['username'];
-$sql = "SELECT username, level FROM user WHERE username = ?";
-$stmt = $koneksi->prepare($sql);
-$stmt->bind_param('s', $username);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if (!$result) {
-    die("Error executing query: " . $koneksi->error);
-}
-
-$user = $result->fetch_assoc();
-$level = $user['level'] ?? 'unknown';
-
-if ($level != 'admin') {
-    die("Unauthorized access.");
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $food_id = $_POST['food_id'];
     $target_dir = "../assets/images/upload/food/";
