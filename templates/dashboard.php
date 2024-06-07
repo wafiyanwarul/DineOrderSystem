@@ -88,7 +88,7 @@ if ($level == 'customer') {
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="../templates/profile.php">Profile</a></li>
-                                <li><a href="contacts.html">Dashboard</a></li>
+                                <li><a href="./dashboard.php">Dashboard</a></li>
                                 <li class="divider"></li>
                                 <li><a href="../templates/logout.php">Logout</a></li>
                             </ul>
@@ -112,7 +112,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Foods -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li>
@@ -250,7 +250,7 @@ if ($level == 'customer') {
                                 <div class="col-md-4 border-top-bottom p-xs">
                                     <h3> Manage Foods </h3>
                                     <small>Atur menu makanan dengan fleksibel. Tambahkan berbagai jenis hidangan, perbarui harga, dan pastikan setiap hidangan tersaji sesuai standar restoran Anda</small>
-                                    <a href="#" class="btn btn-warning btn-lg btn-block m-t">Manage Foods</a>
+                                    <a href="./foods.php" class="btn btn-warning btn-lg btn-block m-t">Manage Foods</a>
                                 </div>
                                 <div class="col-md-4 border-top-bottom p-xs">
                                     <h3> Manage Drinks </h3>

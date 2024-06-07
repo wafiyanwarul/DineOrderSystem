@@ -29,18 +29,17 @@ if ($level == 'customer') {
     $role = 'Unknown';
 }
 
-// Mengambil semua data dari tabel restaurant
-$sql_restaurant = "SELECT restaurant_id, restaurant_name, address, phone, description, image FROM restaurant";
-$result_restaurant = $koneksi->query($sql_restaurant);
+$sql_food = "SELECT food.food_id, food.restaurant_id, food.food_name, food.price, food.description AS food_description, food.image AS food_image, restaurant.restaurant_name FROM food JOIN restaurant ON food.restaurant_id = restaurant.restaurant_id";
+$result_food = $koneksi->query($sql_food);
 
-if (!$result_restaurant) {
-    die("Error executing restaurant query: " . $koneksi->error);
+if (!$result_food) {
+    die("Error executing food query: " . $koneksi->error);
 }
 
-$restaurants = [];
-if ($result_restaurant->num_rows > 0) {
-    while ($row = $result_restaurant->fetch_assoc()) {
-        $restaurants[] = $row;
+$foods = [];
+if ($result_food->num_rows > 0) {
+    while ($row = $result_food->fetch_assoc()) {
+        $foods[] = $row;
     }
 }
 ?>
@@ -53,7 +52,7 @@ if ($result_restaurant->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Restaurants</title>
+    <title>Dine In Hub | Foods</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -116,7 +115,7 @@ if ($result_restaurant->num_rows > 0) {
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
-                    <li class="active">
+                    <li>
                         <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
                     </li>
                     <!-- All Menu -->
@@ -124,10 +123,10 @@ if ($result_restaurant->num_rows > 0) {
                         <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
-                    <li>
+                    <li class="active">
                         <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
-                    </li>
-                    <!-- Drinks -->
+                        </liؤ>
+                        <!-- Drinks -->
                     <li>
                         <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                     </li>
@@ -233,10 +232,10 @@ if ($result_restaurant->num_rows > 0) {
             <!-- Header Dashboard -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Restaurants</h2>
+                    <h2>Foods</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./restaurants.php">Restaurants</a>
+                            <a href="./foods.php">Foods</a>
                         </li>
                         <!-- <li class="active">
                             <strong>Restaurants</strong>
@@ -247,101 +246,158 @@ if ($result_restaurant->num_rows > 0) {
                 </div>
             </div>
             <?php if ($level == 'admin') { ?>
-                <div class="row wrapper-content">
-                    <div class="col-lg-12">
-                        <div class="ibox-title bg-primary">
-                            <h2><strong>Dine In Hub | Manage Restaurant </strong></h2>
-                        </div>
-                        <div class="ibox-content m-b-none">
-                            <p>Kelola restoran Anda </p>
-                            <a class="bg-success" href="./add_restaurant.php">
-                                <div class="btn btn-success btn-block dim b-r-xl">
-                                    <h1><i class="fa-solid fa-plus"></i></h1>
-                                    <h3 class="m-b-xs"><strong>TAMBAH</strong></h3>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
                 <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
-                        <?php if (!empty($restaurants)) : ?>
-                            <?php foreach ($restaurants as $restaurant) : ?>
-                                <div class="col-lg-3">
-                                    <div class="contact-box center-version">
-                                        <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>">
-                                            <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h3><br>
-                                            <img alt="image" class="img-fluid img-circle" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>"><br>
-                                            <div class="font-bold"><?php echo htmlspecialchars($restaurant['address'] ?? ''); ?></div>
-                                            <address class="m-t-md">
-                                                <strong><?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?></strong><br>
-                                                <p><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></p>
-                                            </address>
-                                        </a>
-                                        <div class="contact-box-footer">
-                                            <div class="m-t-xs btn-group">
-                                                <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> Edit Restaurant </a>
-                                            </div>
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title bg-warning">
+                                    <h2><strong>Dine In Hub | Manage Foods</strong></h2>
+                                </div>
+                                <div class="ibox-content m-b-lg">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <p>Kelola makanan restoran Anda </p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <a href="javascript:void(0);" onclick="toggleDeleteMode()">
+                                                <div class="btn btn-danger btn-block b-r-xl m-t-md">
+                                                    <h1><i class="fa-solid fa-minus"></i></h1>
+                                                    <h3 class="m-b-xs"><strong>HAPUS MAKANAN</strong></h3>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <a href="./add_food.php">
+                                                <div class="btn btn-success btn-block b-r-xl m-t-md">
+                                                    <h1><i class="fa-solid fa-plus"></i></h1>
+                                                    <h3 class="m-b-xs"><strong>TAMBAH MAKANAN</strong></h3>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <a href="javascript:void(0);" id="confirmDeleteButton" onclick="confirmDelete()" style="display: none;">
+                                                <div class="btn btn-primary btn-block b-r-xl m-t-md">
+                                                    <h1><i class="fa-solid fa-check"></i></h1>
+                                                    <h3 class="m-b-xs"><strong>KONFIRMASI HAPUS</strong></h3>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </div>
-                </div>
-        </div>
-
-    <?php } elseif ($level == 'customer') { ?>
-        <div class="wrapper wrapper-content animated fadeInRight">
-            <div class="row">
-                <?php if (!empty($restaurants)) : ?>
-                    <?php foreach ($restaurants as $restaurant) : ?>
-                        <div class="col-lg-3">
-                            <div class="contact-box center-version">
-                                <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>">
-                                    <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>">
-                                    <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h3>
-                                    <div class="font-bold"><?php echo htmlspecialchars($restaurant['address'] ?? ''); ?></div>
-                                    <address class="m-t-md">
-                                        <strong><?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?></strong><br>
-                                        <p><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></p>
-                                    </address>
-                                </a>
-                                <div class="contact-box-footer">
-                                    <div class="m-t-xs btn-group">
-                                        <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Restaurant </a>
+                                <form id="deleteForm" action="../actions/delete_food_action.php" method="post">
+                                    <div class="row">
+                                        <?php if (!empty($foods)) : ?>
+                                            <?php foreach ($foods as $food) : ?>
+                                                <div class="col-lg-3">
+                                                    <div class="contact-box center-version">
+                                                        <input type="checkbox" name="food_ids[]" value="<?= $food['food_id'] ?>" class="delete-checkbox" style="display: none;">
+                                                        <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
+                                                            <h3 class="m-b-xs"><strong><?= htmlspecialchars($food['food_name']) ?></strong></h3><br>
+                                                            <img alt="image" class="img-fluid img-circle" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" src="<?= htmlspecialchars($food['food_image']) ?>"><br>
+                                                            <div class="font-bold">Rp. <?= htmlspecialchars($food['price']) ?></div>
+                                                            <address class="m-t-md">
+                                                                <strong><?= htmlspecialchars($food['restaurant_name']) ?></strong><br>
+                                                                <p><?= htmlspecialchars($food['food_description']) ?></p>
+                                                            </address>
+                                                        </a>
+                                                        <div class="contact-box-footer">
+                                                            <div class="m-t-xs btn-group">
+                                                                <a href="#" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> Edit Food </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php else : ?>
+                                            <p>No foods available</p>
+                                        <?php endif; ?>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
+                    </div>
+                </div>
+            <?php } elseif ($level == 'customer') { ?>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title bg-warning">
+                                    <h2><strong>Dine In Hub | Foods</strong></h2>
+                                </div>
+                                <div class="ibox-content m-b-lg">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <p>Selamat memilih makanan favorit Anda </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form id="deleteForm" action="../actions/delete_food_action.php" method="post">
+                                    <div class="row">
+                                        <?php if (!empty($foods)) : ?>
+                                            <?php foreach ($foods as $food) : ?>
+                                                <div class="col-lg-3">
+                                                    <div class="contact-box center-version">
+                                                        <input type="checkbox" name="food_ids[]" value="<?= $food['food_id'] ?>" class="delete-checkbox" style="display: none;">
+                                                        <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
+                                                            <h3 class="m-b-xs"><strong><?= htmlspecialchars($food['food_name']) ?></strong></h3><br>
+                                                            <img alt="image" class="img-fluid img-circle" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" src="<?= htmlspecialchars($food['food_image']) ?>"><br>
+                                                            <div class="font-bold">Rp. <?= htmlspecialchars($food['price']) ?></div>
+                                                            <address class="m-t-md">
+                                                                <strong><?= htmlspecialchars($food['restaurant_name']) ?></strong><br>
+                                                                <p><?= htmlspecialchars($food['food_description']) ?></p>
+                                                            </address>
+                                                        </a>
+                                                        <div class="contact-box-footer">
+                                                            <div class="m-t-xs btn-group">
+                                                                <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> View Food </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php else : ?>
+                                            <p>No foods available</p>
+                                        <?php endif; ?>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <? } else { ?>
+                <!-- Code if user isn't customer and admin role -->
+            <?php } ?>
+
+
         </div>
-    <? } else { ?>
-        <!-- Code if user isn't customer and admin role -->
-    <?php } ?>
-
-
-    </div>
 
 
     </div>
     </div>
 
+    <!-- Script to hidden confirm button -->
     <script>
-        $(document).ready(function() {
-            setTimeout(function() {
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.success('Restaurants Page', 'Dine In Hub');
+        function toggleDeleteMode() {
+            var checkboxes = document.getElementsByClassName('delete-checkbox');
+            var confirmButton = document.getElementById('confirmDeleteButton');
+            for (var i = 0; i < checkboxes.length; i++) {
+                checkboxes[i].style.display = checkboxes[i].style.display === 'block' ? 'none' : 'block';
+            }
+            confirmButton.style.display = confirmButton.style.display === 'block' ? 'none' : 'block';
+        }
 
-            }, 1300);
-        });
+        function confirmDelete() {
+            var checkedBoxes = document.querySelectorAll('input.delete-checkbox:checked');
+            var ids = Array.from(checkedBoxes).map(cb => cb.value);
+            if (ids.length > 0) {
+                if (confirm("Are you sure you want to delete the selected foods?")) {
+                    document.getElementById('deleteForm').submit();
+                }
+            } else {
+                alert("No foods selected for deletion.");
+            }
+        }
     </script>
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>

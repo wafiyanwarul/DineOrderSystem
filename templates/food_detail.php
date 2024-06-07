@@ -29,38 +29,28 @@ if ($level == 'customer') {
     $role = 'Unknown';
 }
 
-// Mendapatkan ID restoran dari URL
-$restaurant_id = $_GET['id'] ?? null;
+// Mendapatkan ID makanan dari URL
+$food_id = $_GET['id'] ?? null;
 
-if ($restaurant_id === null) {
-    die("Restaurant ID is missing.");
+if ($food_id === null) {
+    die("Food ID is missing.");
 }
 
-// Mengambil data restoran berdasarkan ID
-$sql = "SELECT restaurant_name, address, phone, description, image FROM restaurant WHERE restaurant_id = ?";
-$stmt = $koneksi->prepare($sql);
-$stmt->bind_param('i', $restaurant_id);
+// Mengambil data makanan berdasarkan ID
+$sql_food = "SELECT food.food_id, food.food_name, food.price, food.description, food.image, restaurant.restaurant_name 
+        FROM food 
+        JOIN restaurant ON food.restaurant_id = restaurant.restaurant_id 
+        WHERE food.food_id = ?";
+$stmt = $koneksi->prepare($sql_food);
+$stmt->bind_param('i', $food_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    die("Restaurant not found.");
+    die("Food not found.");
 }
 
-$restaurant = $result->fetch_assoc();
-
-// Mengambil data makanan berdasarkan restaurant_id
-$sql_foods = "SELECT * FROM food WHERE restaurant_id = ?";
-$stmt_foods = $koneksi->prepare($sql_foods);
-$stmt_foods->bind_param('i', $restaurant_id);
-$stmt_foods->execute();
-$result_foods = $stmt_foods->get_result();
-
-$foods = [];
-while ($food = $result_foods->fetch_assoc()) {
-    $foods[] = $food;
-}
-
+$food = $result->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +61,7 @@ while ($food = $result_foods->fetch_assoc()) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | <?php echo htmlspecialchars($restaurant['restaurant_name']); ?></title>
+    <title>Dine In Hub | <?php echo htmlspecialchars($food['food_name']); ?></title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -125,10 +115,10 @@ while ($food = $result_foods->fetch_assoc()) {
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="../templates/profile.php">Profile</a></li>
-                                <li><a href="contacts.html">Dashboard</a></li>
+                                <li><a href="./profile.php">Profile</a></li>
+                                <li><a href="./dashboard.php">Dashboard</a></li>
                                 <li class="divider"></li>
-                                <li><a href="../templates/logout.php">Logout</a></li>
+                                <li><a href="./logout.php">Logout</a></li>
                             </ul>
                         </div>
                         <div class="logo-element">
@@ -141,7 +131,7 @@ while ($food = $result_foods->fetch_assoc()) {
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
-                    <li class="active">
+                    <li>
                         <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
                     </li>
                     <!-- All Menu -->
@@ -149,7 +139,7 @@ while ($food = $result_foods->fetch_assoc()) {
                         <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
-                    <li>
+                    <li class="active">
                         <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
@@ -258,13 +248,13 @@ while ($food = $result_foods->fetch_assoc()) {
             <!-- Header Dashboard -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Restaurants</h2>
+                    <h2>Foods</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./restaurants.php">Restaurants</a>
+                            <a href="./foods.php">Foods</a>
                         </li>
                         <li class="active">
-                            <strong><?php echo htmlspecialchars($restaurant['restaurant_name']); ?></strong>
+                            <strong><?php echo htmlspecialchars($food['food_name']); ?></strong>
                         </li>
                     </ol>
                 </div>
@@ -279,7 +269,7 @@ while ($food = $result_foods->fetch_assoc()) {
                         <div class="col-lg-12">
                             <div class="ibox btn-block float-e-margins">
                                 <div class="ibox-title bg-primary" style="display: flex; align-items: center; justify-content: space-between;">
-                                    <h2 class="m-b-sm">Update Restaurant Data : <strong id="restaurant-name-display"><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h2>
+                                    <h2 class="m-b-sm">Update Data Makanan: <strong id="food-name-display"><?php echo htmlspecialchars($food['food_name']); ?></strong></h2>
                                     <div class="ibox-tools">
                                         <button id="save-data-btn" class="btn btn-danger" type="button" style="display: none;"><i class="fa fa-check"></i>&nbsp;Save</button>
                                         <button id="edit-data-btn" class="btn btn-warning" type="button"><i class="fa fa-paste"></i> Edit</button>
@@ -288,53 +278,74 @@ while ($food = $result_foods->fetch_assoc()) {
                                 <div class="ibox-content">
                                     <div id="alert-data-success" class="alert alert-success alert-dismissable" style="display: none;">
                                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                        Data Restoran <a class="alert-link" href="#" id="alert-data-success-link"><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></a> berhasil diperbarui.
+                                        Data Makanan <a class="alert-link" href="#" id="alert-data-success-link"><?php echo htmlspecialchars($food['food_name']); ?></a> berhasil diperbarui.
                                     </div>
                                     <div id="alert-data-danger" class="alert alert-danger alert-dismissable" style="display: none;">
                                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                        Data Restoran <a class="alert-link" href="#" id="alert-data-danger-link"><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></a> gagal diperbarui.
+                                        Data Makanan <a class="alert-link" href="#" id="alert-data-danger-link"><?php echo htmlspecialchars($food['food_name']); ?></a> gagal diperbarui.
                                     </div>
-                                    <form id="restaurant-data-form" action="update_restaurant_data.php" method="post">
+
+                                    <form id="food-data-form" action="update_food_data.php" method="post">
                                         <div class="form-group">
-                                            <label for="restaurant_name">Name:</label>
-                                            <input type="text" class="form-control" id="restaurant_name" name="restaurant_name" value="<?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?>" readonly>
+                                            <label for="food_name">Nama Makanan:</label>
+                                            <input type="text" class="form-control" id="food_name" name="food_name" value="<?php echo htmlspecialchars($food['food_name']); ?>" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="address">Address:</label>
-                                            <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($restaurant['address'] ?? ''); ?>" readonly>
+                                            <label for="restaurant_id">Nama Restoran:</label>
+                                            <select id="restaurant_id" name="restaurant_id" class="form-control" <?php echo $role === 'Admin' ? '' : 'disabled'; ?>>
+                                                <?php
+                                                // Query untuk mengambil semua nama restoran
+                                                $sql_restaurants = "SELECT restaurant_id, restaurant_name FROM restaurant";
+                                                $result_restaurants = $koneksi->query($sql_restaurants);
+                                                if ($result_restaurants->num_rows > 0) {
+                                                    while ($row_restaurant = $result_restaurants->fetch_assoc()) {
+                                                        // Ubah opsi pada dropbox untuk mencakup semua nama restoran
+                                                        echo '<option value="' . $row_restaurant['restaurant_id'] . '"';
+                                                        if ($food['restaurant_name'] === $row_restaurant['restaurant_name']) {
+                                                            echo ' selected';
+                                                        }
+                                                        echo '>' . htmlspecialchars($row_restaurant['restaurant_name']) . '</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone">Phone Number:</label>
-                                            <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?>" readonly>
+                                            <label for="price">Harga:</label>
+                                            <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($food['price']); ?>" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="description">Description:</label>
-                                            <textarea class="form-control" id="description" name="description" readonly><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></textarea>
+                                            <label for="description">Deskripsi:</label>
+                                            <textarea class="form-control" id="description" name="description" readonly><?php echo htmlspecialchars($food['description']); ?></textarea>
                                         </div>
-                                        <input type="hidden" name="restaurant_id" value="<?php echo $restaurant_id; ?>">
+
+                                        <input type="hidden" name="food_id" value="<?php echo $food_id; ?>">
                                     </form>
                                 </div>
                             </div>
+
                             <div class="ibox btn-block float-e-margins">
                                 <div class="ibox-title bg-primary" style="display: flex; align-items: center; justify-content: space-between;">
-                                    <h2 class="m-b-sm">Update Image : <strong id="restaurant-image-display"><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h2>
+                                    <h2 class="m-b-sm">Update Gambar: <strong id="food-image-display"><?php echo htmlspecialchars($food['food_name']); ?></strong></h2>
                                     <div class="ibox-tools">
                                         <button id="save-image-btn" class="btn btn-danger" type="button" style="display: none;"><i class="fa fa-check"></i>&nbsp;Save</button>
                                         <button id="edit-image-btn" class="btn btn-warning" type="button"><i class="fa fa-paste"></i> Edit</button>
                                     </div>
                                 </div>
                                 <div class="ibox-content">
+                                    <!-- Notification UI Alert -->
                                     <div id="alert-image-success" class="alert alert-success alert-dismissable" style="display: none;">
                                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                        Gambar Restoran <a class="alert-link" href="#" id="alert-image-success-link"><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></a> berhasil diperbarui.
+                                        Gambar <strong id="alert-image-success-link">Makanan</strong> berhasil diperbarui.
                                     </div>
                                     <div id="alert-image-danger" class="alert alert-danger alert-dismissable" style="display: none;">
                                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                        Gambar Restoran <a class="alert-link" href="#" id="alert-image-danger-link"><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></a> gagal diperbarui.
+                                        Terjadi kesalahan saat memperbarui gambar <strong id="alert-image-danger-link">Makanan</strong>.
                                     </div>
-                                    <form id="restaurant-image-form" action="../actions/update_restaurant_image.php" method="post" enctype="multipart/form-data">
+                                    <!-- Edit Image Food Form -->
+                                    <form id="food-image-form" action="../actions/update_food_image.php" method="post" enctype="multipart/form-data">
                                         <div class="form-group">
-                                            <label for="image">Image:</label>
+                                            <label for="image">Gambar:</label>
                                             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                                                 <div class="form-control" data-trigger="fileinput">
                                                     <i class="glyphicon glyphicon-file fileinput-exists"></i>
@@ -348,7 +359,7 @@ while ($food = $result_foods->fetch_assoc()) {
                                                 <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
                                             </div>
                                         </div>
-                                        <input type="hidden" name="restaurant_id" value="<?php echo $restaurant_id; ?>">
+                                        <input type="hidden" name="food_id" value="<?php echo $food_id; ?>">
                                     </form>
                                 </div>
                             </div>
@@ -359,61 +370,45 @@ while ($food = $result_foods->fetch_assoc()) {
                 <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="ibox float-e-margins">
-                                <div class="ibox-title bg-info">
-                                    <h2 class="m-b-xs m-b-sm"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h2>
+                            <div class="ibox btn-block float-e-margins">
+                                <div class="ibox-title bg-primary" style="display: flex; align-items: center; justify-content: space-between;">
+                                    <h2 class="m-b-sm"><strong id="food-name-display"><?php echo htmlspecialchars($food['food_name']); ?></strong></h2>
                                 </div>
                                 <div class="ibox-content">
-                                    <form id="restaurant-data-form">
-                                        <br>
-                                        <img alt="image" class="img-fluid b-r-xl" style="max-width: 50vh; max-height: 50vh; object-fit: cover; display: block; margin: 0 auto;" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>">
-                                        <div class="form-group m-t-lg">
-                                            <label for="restaurant_name">Name:</label>
-                                            <input type="text" class="form-control" id="restaurant_name" name="restaurant_name" value="<?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?>" readonly>
+                                    <br>
+                                    <img alt="image" class="img-fluid b-r-xl" style="max-width: 50vh; max-height: 50vh; object-fit: cover; display: block; margin: 0 auto;" src="../<?php echo htmlspecialchars($food['image'] ?? ''); ?>"><br>
+                                    <form id="food-data-form" action="update_food_data.php" method="post">
+                                        <div class="form-group">
+                                            <label for="food_name">Nama Makanan :</label>
+                                            <input type="text" class="form-control" id="food_name" name="food_name" value="<?php echo htmlspecialchars($food['food_name']); ?>" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="address">Address:</label>
-                                            <input type="text" class="form-control" id="address" name="address" value="<?php echo htmlspecialchars($restaurant['address'] ?? ''); ?>" readonly>
+                                            <label for="restaurant_id">Nama Restoran :</label>
+                                            <select id="restaurant_id" name="restaurant_id" class="form-control" disabled>
+                                                <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
+                                                <?php
+                                                // Pastikan file koneksi di-include
+                                                $sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant WHERE restaurant_id = 2";
+                                                $result_restaurant = $koneksi->query($sql_restaurant);
+                                                if ($result_restaurant->num_rows > 0) {
+                                                    while ($row = $result_restaurant->fetch_assoc()) {
+                                                        echo "<option value='" . $row['restaurant_id'] . "'>" . $row['restaurant_name'] . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="phone">Phone Number:</label>
-                                            <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?>" readonly>
+                                            <label for="price">Harga :</label>
+                                            <input type="text" class="form-control" id="price" name="price" value="<?php echo htmlspecialchars($food['price']); ?>" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="description">Description:</label>
-                                            <textarea class="form-control" id="description" name="description" readonly><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></textarea>
+                                            <label for="description">Deskripsi :</label>
+                                            <textarea class="form-control" id="description" name="description" readonly><?php echo htmlspecialchars($food['description']); ?></textarea>
                                         </div>
+
+                                        <input type="hidden" name="food_id" value="<?php echo $food_id; ?>">
                                     </form>
-                                </div>
-                                <div class="ibox-title">
-                                    <h2 class="m-b-xs m-b-sm"><strong>Menu</strong></h2>
-                                </div>
-                                <div class="ibox-content">
-                                    <div class="row">
-                                        <?php if (!empty($foods)) : ?>
-                                            <?php foreach ($foods as $food) : ?>
-                                                <div class="col-lg-3">
-                                                    <div class="contact-box center-version">
-                                                        <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
-                                                            <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($food['image'] ?? ''); ?>">
-                                                            <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($food['food_name'] ?? ''); ?></strong></h3>
-                                                            <div class="font-bold"><?php echo htmlspecialchars($food['price'] ?? ''); ?></div>
-                                                            <address class="m-t-md">
-                                                                <p><?php echo htmlspecialchars($food['description'] ?? ''); ?></p>
-                                                            </address>
-                                                        </a>
-                                                        <div class="contact-box-footer">
-                                                            <div class="m-t-xs btn-group">
-                                                                <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Food</a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            <?php endforeach; ?>
-                                        <?php else : ?>
-                                            <p>No foods found for this restaurant.</p>
-                                        <?php endif; ?>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -425,32 +420,40 @@ while ($food = $result_foods->fetch_assoc()) {
         </div>
     </div>
 
-    <!-- JS for Edit and Save Restaurant Data Only-->
+    <!-- JavaScript for Edit and Save Food Data Only -->
     <script>
         document.getElementById('edit-data-btn').addEventListener('click', function() {
-            document.querySelectorAll('#restaurant-data-form input, #restaurant-data-form textarea').forEach(function(element) {
+            document.querySelectorAll('#food-data-form input, #food-data-form textarea').forEach(function(element) {
                 element.removeAttribute('readonly');
             });
             document.getElementById('save-data-btn').style.display = 'inline-block';
             document.getElementById('edit-data-btn').style.display = 'none';
+
+            // Menghapus atribut disabled pada dropdown restaurant saat tombol edit diklik
+            document.getElementById('restaurant_id').removeAttribute('disabled');
         });
 
-        document.getElementById('save-data-btn').addEventListener('click', function() {
-            var formData = new FormData(document.getElementById('restaurant-data-form'));
+        // Menjadikan dropdown readonly saat halaman dimuat
+        window.onload = function() {
+            document.getElementById('restaurant_id').setAttribute('disabled', 'disabled');
+        };
 
-            fetch('../actions/update_restaurant_data.php', {
+        document.getElementById('save-data-btn').addEventListener('click', function() {
+            var formData = new FormData(document.getElementById('food-data-form'));
+
+            fetch('../actions/update_food_data.php', {
                 method: 'POST',
                 body: formData
             }).then(response => response.json()).then(data => {
                 if (data.success) {
                     document.getElementById('alert-data-success').style.display = 'block';
-                    document.getElementById('alert-data-success-link').innerText = data.restaurant_name;
+                    document.getElementById('alert-data-success-link').innerText = data.food_name;
                     setTimeout(function() {
                         location.reload(); // Refresh halaman setelah 2 detik
-                    }, 500);
+                    }, 1000);
                 } else {
                     document.getElementById('alert-data-danger').style.display = 'block';
-                    document.getElementById('alert-data-danger-link').innerText = data.restaurant_name;
+                    document.getElementById('alert-data-danger-link').innerText = data.food_name;
                 }
             }).catch(error => {
                 document.getElementById('alert-data-danger').style.display = 'block';
@@ -462,7 +465,7 @@ while ($food = $result_foods->fetch_assoc()) {
         });
     </script>
 
-    <!-- JS for Edit and Save Restaurant Photo Only-->
+    <!-- JavaScript for Edit and Save Food Image -->
     <script>
         document.getElementById('edit-image-btn').addEventListener('click', function() {
             document.getElementById('file').removeAttribute('disabled');
@@ -471,21 +474,21 @@ while ($food = $result_foods->fetch_assoc()) {
         });
 
         document.getElementById('save-image-btn').addEventListener('click', function() {
-            var formData = new FormData(document.getElementById('restaurant-image-form'));
+            var formData = new FormData(document.getElementById('food-image-form'));
 
-            fetch('../actions/update_restaurant_image.php', {
+            fetch('../actions/update_food_image.php', {
                 method: 'POST',
                 body: formData
             }).then(response => response.json()).then(data => {
                 if (data.success) {
                     document.getElementById('alert-image-success').style.display = 'block';
-                    document.getElementById('alert-image-success-link').innerText = data.restaurant_name || 'Restaurant';
+                    document.getElementById('alert-image-success-link').innerText = data.food_name || 'Makanan';
                     setTimeout(function() {
                         location.reload(); // Refresh halaman setelah 2 detik
                     }, 1000);
                 } else {
                     document.getElementById('alert-image-danger').style.display = 'block';
-                    document.getElementById('alert-image-danger-link').innerText = data.restaurant_name || 'an error occurred';
+                    document.getElementById('alert-image-danger-link').innerText = data.food_name || 'an error occurred';
                 }
             }).catch(error => {
                 document.getElementById('alert-image-danger').style.display = 'block';
@@ -498,21 +501,7 @@ while ($food = $result_foods->fetch_assoc()) {
         });
     </script>
 
-    <!-- JS for Toastr -->
-    <script>
-        $(document).ready(function() {
-            setTimeout(function() {
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.success('<?php echo htmlspecialchars($restaurant['restaurant_name']); ?>', 'Dine In Hub');
 
-            }, 1300);
-        });
-    </script>
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>
     <script src="../assets/inspinia/js/bootstrap.min.js"></script>
@@ -534,86 +523,3 @@ while ($food = $result_foods->fetch_assoc()) {
 </body>
 
 </html>
-
-<!-- <div class="ibox float-e-margins">
-                                <div class="ibox-title">
-                                    <h5>Big gallery carousel</h5>
-                                    <div class="ibox-tools">
-                                        <a class="collapse-link">
-                                            <i class="fa fa-chevron-up"></i>
-                                        </a>
-                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                            <i class="fa fa-wrench"></i>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-user">
-                                            <li><a href="#">Config option 1</a>
-                                            </li>
-                                            <li><a href="#">Config option 2</a>
-                                            </li>
-                                        </ul>
-                                        <a class="close-link">
-                                            <i class="fa fa-times"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="ibox-content">
-                                    <div class="carousel slide" id="carousel3">
-                                        <div class="carousel-inner">
-                                            <div class="item gallery active left">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big2.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big3.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item gallery next left">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big2.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big3.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="item gallery">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big2.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big3.jpg">
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <img alt="image" class="img-responsive" src="../assets/inspinia/img/p_big1.jpg">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <a data-slide="prev" href="#carousel3" class="left carousel-control">
-                                            <span class="icon-prev"></span>
-                                        </a>
-                                        <a data-slide="next" href="#carousel3" class="right carousel-control">
-                                            <span class="icon-next"></span>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div> -->

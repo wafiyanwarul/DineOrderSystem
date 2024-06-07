@@ -1,23 +1,16 @@
 <?php
 session_start();
 include('../includes/db_connect.php'); // Ganti dengan file koneksi database Anda
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 if (!isset($_SESSION['username'])) {
     die("<h1><center>Anda belum login</h1></center>");
 }
-
 // Mendapatkan data user dari session atau database
 $username = $_SESSION['username'];
 $sql = "SELECT username, level FROM user WHERE username = '$username'";
 $result = $koneksi->query($sql);
-
-if (!$result) {
-    die("Error executing query: " . $koneksi->error);
-}
-
 $user = $result->fetch_assoc();
+
 $username = $user['username'] ?? 'Guest';
 $level = $user['level'] ?? 'unknown';
 
@@ -29,8 +22,8 @@ if ($level == 'customer') {
     $role = 'Unknown';
 }
 
-// Mengambil semua data dari tabel restaurant
-$sql_restaurant = "SELECT restaurant_id, restaurant_name, address, phone, description, image FROM restaurant";
+// Ambil data restoran
+$sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant";
 $result_restaurant = $koneksi->query($sql_restaurant);
 
 if (!$result_restaurant) {
@@ -53,7 +46,7 @@ if ($result_restaurant->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Restaurants</title>
+    <title>Dine In Hub | Foods</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -67,8 +60,6 @@ if ($result_restaurant->num_rows > 0) {
 
     <link href="../assets/inspinia/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/inspinia/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
-    <link href="../assets/inspinia/css/style.css" rel="stylesheet">
 
     <!-- Toastr style -->
     <link href="../assets/inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet">
@@ -76,8 +67,14 @@ if ($result_restaurant->num_rows > 0) {
     <!-- Gritter -->
     <link href="../assets/inspinia/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
 
+    <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/style.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/plugins/codemirror/codemirror.css" rel="stylesheet">
+
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/ce1fc2061c.js" crossorigin="anonymous"></script>
+
 
 </head>
 
@@ -100,8 +97,8 @@ if ($result_restaurant->num_rows > 0) {
                                 </span>
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                <li><a href="./profile.php">Profile</a></li>
-                                <li><a href="./dashboard.php">Dashboard</a></li>
+                                <li><a href="../templates/profile.php">Profile</a></li>
+                                <li><a href="contacts.html">Dashboard</a></li>
                                 <li class="divider"></li>
                                 <li><a href="../templates/logout.php">Logout</a></li>
                             </ul>
@@ -116,7 +113,7 @@ if ($result_restaurant->num_rows > 0) {
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
-                    <li class="active">
+                    <li>
                         <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
                     </li>
                     <!-- All Menu -->
@@ -124,8 +121,8 @@ if ($result_restaurant->num_rows > 0) {
                         <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
-                    <li>
-                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                    <li class="active">
+                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li>
@@ -157,6 +154,9 @@ if ($result_restaurant->num_rows > 0) {
                     <!-- Ratings -->
                     <li>
                         <a href="#"><i class="fa-solid fa-star"></i> <span class="nav-label">Ratings</span><span class="label label-info pull-right">NEW</span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="toastr_notifications.html">Notification</a></li>
+                        </ul>
                     </li>
                 </ul>
 
@@ -233,116 +233,116 @@ if ($result_restaurant->num_rows > 0) {
             <!-- Header Dashboard -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Restaurants</h2>
+                    <h2>Foods</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./restaurants.php">Restaurants</a>
+                            <a href="./foods.php">Foods</a>
                         </li>
-                        <!-- <li class="active">
-                            <strong>Restaurants</strong>
-                        </li> -->
+                        <li class="active">
+                            <strong>Add Food</strong>
+                        </li>
                     </ol>
                 </div>
                 <div class="col-lg-2">
                 </div>
             </div>
+
             <?php if ($level == 'admin') { ?>
-                <div class="row wrapper-content">
-                    <div class="col-lg-12">
-                        <div class="ibox-title bg-primary">
-                            <h2><strong>Dine In Hub | Manage Restaurant </strong></h2>
-                        </div>
-                        <div class="ibox-content m-b-none">
-                            <p>Kelola restoran Anda </p>
-                            <a class="bg-success" href="./add_restaurant.php">
-                                <div class="btn btn-success btn-block dim b-r-xl">
-                                    <h1><i class="fa-solid fa-plus"></i></h1>
-                                    <h3 class="m-b-xs"><strong>TAMBAH</strong></h3>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="wrapper wrapper-content animated fadeInRight">
+                <div class="wrapper-content animated fadeInRight">
                     <div class="row">
-                        <?php if (!empty($restaurants)) : ?>
-                            <?php foreach ($restaurants as $restaurant) : ?>
-                                <div class="col-lg-3">
-                                    <div class="contact-box center-version">
-                                        <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>">
-                                            <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h3><br>
-                                            <img alt="image" class="img-fluid img-circle" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>"><br>
-                                            <div class="font-bold"><?php echo htmlspecialchars($restaurant['address'] ?? ''); ?></div>
-                                            <address class="m-t-md">
-                                                <strong><?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?></strong><br>
-                                                <p><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></p>
-                                            </address>
-                                        </a>
-                                        <div class="contact-box-footer">
-                                            <div class="m-t-xs btn-group">
-                                                <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> Edit Restaurant </a>
+                        <div class="col-lg-8 b-r">
+                            <?php if (isset($_SESSION['notification'])) : ?>
+                                <?php if ($_SESSION['notification']['type'] == 'success') : ?>
+                                    <div id="alert-image-success" class="alert alert-success alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <?= $_SESSION['notification']['message'] ?>
+                                    </div>
+                                <?php else : ?>
+                                    <div id="alert-image-danger" class="alert alert-danger alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <?= $_SESSION['notification']['message'] ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php unset($_SESSION['notification']); ?>
+                            <?php endif; ?>
+                            <div class="ibox">
+                                <div class="ibox-title bg-success">
+                                    <h1 class="m-t-none m-b">Tambah Makanan</h1>
+                                    <p>Makanan yang ditambahkan akan dapat dilihat di menu customer</p>
+                                </div>
+                                <div class="ibox-content">
+                                    <form action="../actions/add_food_action.php" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="restaurant_id">Pilih Restoran:</label>
+                                            <select id="restaurant_id" name="restaurant_id" class="form-control" required>
+                                                <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
+                                                <?php
+                                                include 'koneksi.php'; // Pastikan file koneksi di-include
+                                                $sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant";
+                                                $result_restaurant = $koneksi->query($sql_restaurant);
+                                                if ($result_restaurant->num_rows > 0) {
+                                                    while ($row = $result_restaurant->fetch_assoc()) {
+                                                        echo "<option value='" . $row['restaurant_id'] . "'>" . $row['restaurant_name'] . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="food_name">Nama Makanan:</label>
+                                            <input type="text" id="food_name" name="food_name" class="form-control" placeholder="Enter food name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">Harga:</label>
+                                            <input type="text" id="price" name="price" class="form-control" placeholder="Enter price" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Deskripsi:</label>
+                                            <textarea id="description" name="description" class="form-control" placeholder="Enter description" required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">Gambar:</label>
+                                            <div class="form-group">
+                                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                                    <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" id="file" name="image"></span>
+                                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Tambah Makanan</button>
+                                    </form>
                                 </div>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+                            </div>
+                        </div>
                     </div>
                 </div>
         </div>
 
     <?php } elseif ($level == 'customer') { ?>
-        <div class="wrapper wrapper-content animated fadeInRight">
-            <div class="row">
-                <?php if (!empty($restaurants)) : ?>
-                    <?php foreach ($restaurants as $restaurant) : ?>
-                        <div class="col-lg-3">
-                            <div class="contact-box center-version">
-                                <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>">
-                                    <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>">
-                                    <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h3>
-                                    <div class="font-bold"><?php echo htmlspecialchars($restaurant['address'] ?? ''); ?></div>
-                                    <address class="m-t-md">
-                                        <strong><?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?></strong><br>
-                                        <p><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></p>
-                                    </address>
-                                </a>
-                                <div class="contact-box-footer">
-                                    <div class="m-t-xs btn-group">
-                                        <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Restaurant </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
+
     <? } else { ?>
         <!-- Code if user isn't customer and admin role -->
     <?php } ?>
 
-
     </div>
 
+    <!-- Script for Dropzone File Upload -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/js/fileinput.min.js"></script>
 
-    </div>
-    </div>
+    <!-- Custom and plugin javascript -->
+    <script src="../assets/inspinia/js/inspinia.js"></script>
+    <script src="../assets/inspinia/js/plugins/pace/pace.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            setTimeout(function() {
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.success('Restaurants Page', 'Dine In Hub');
+    <!-- Jasny -->
+    <script src="../assets/inspinia/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 
-            }, 1300);
-        });
-    </script>
+    <!-- CodeMirror -->
+    <script src="../assets/inspinia/js/plugins/codemirror/codemirror.js"></script>
+    <script src="../assets/inspinia/js/plugins/codemirror/mode/xml/xml.js"></script>
+
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>
     <script src="../assets/inspinia/js/bootstrap.min.js"></script>
