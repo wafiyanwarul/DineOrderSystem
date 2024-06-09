@@ -37,10 +37,22 @@ if ($food_id === null) {
 }
 
 // Mengambil data makanan berdasarkan ID
-$sql_food = "SELECT food.food_id, food.food_name, food.price, food.description, food.image, restaurant.restaurant_name 
-        FROM food 
-        JOIN restaurant ON food.restaurant_id = restaurant.restaurant_id 
-        WHERE food.food_id = ?";
+$sql_food = "SELECT food.food_id,
+                    food.food_name, 
+                    food.price, 
+                    food.description, 
+                    food.image, 
+                    restaurant.restaurant_name,
+                    category.category_id,
+                    category.category_name
+        FROM 
+            food 
+        JOIN
+            restaurant ON food.restaurant_id = restaurant.restaurant_id 
+        JOIN 
+            category ON food.category_id = category.category_id
+        WHERE
+            food.food_id = ?";
 $stmt = $koneksi->prepare($sql_food);
 $stmt->bind_param('i', $food_id);
 $stmt->execute();
@@ -144,7 +156,7 @@ $food = $result->fetch_assoc();
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -299,16 +311,36 @@ $food = $result->fetch_assoc();
                                             <select id="restaurant_id" name="restaurant_id" class="form-control" <?php echo $role === 'Admin' ? '' : 'disabled'; ?>>
                                                 <?php
                                                 // Query untuk mengambil semua nama restoran
-                                                $sql_restaurants = "SELECT restaurant_id, restaurant_name FROM restaurant";
-                                                $result_restaurants = $koneksi->query($sql_restaurants);
-                                                if ($result_restaurants->num_rows > 0) {
-                                                    while ($row_restaurant = $result_restaurants->fetch_assoc()) {
+                                                $sql_categories = "SELECT restaurant_id, restaurant_name FROM restaurant";
+                                                $result_categories = $koneksi->query($sql_categories);
+                                                if ($result_categories->num_rows > 0) {
+                                                    while ($row_restaurant = $result_categories->fetch_assoc()) {
                                                         // Ubah opsi pada dropbox untuk mencakup semua nama restoran
                                                         echo '<option value="' . $row_restaurant['restaurant_id'] . '"';
                                                         if ($food['restaurant_name'] === $row_restaurant['restaurant_name']) {
                                                             echo ' selected';
                                                         }
                                                         echo '>' . htmlspecialchars($row_restaurant['restaurant_name']) . '</option>';
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category_id">Nama Restoran:</label>
+                                            <select id="category_id" name="category_id" class="form-control" <?php echo $role === 'Admin' ? '' : 'disabled'; ?>>
+                                                <?php
+                                                // Query untuk mengambil semua nama restoran
+                                                $sql_categories = "SELECT category_id, category_name FROM category";
+                                                $result_categories = $koneksi->query($sql_categories);
+                                                if ($result_categories->num_rows > 0) {
+                                                    while ($row_category = $result_categories->fetch_assoc()) {
+                                                        // Ubah opsi pada dropbox untuk mencakup semua nama restoran
+                                                        echo '<option value="' . $row_category['category_id'] . '"';
+                                                        if ($food['category_name'] === $row_category['category_name']) {
+                                                            echo ' selected';
+                                                        }
+                                                        echo '>' . htmlspecialchars($row_category['category_name']) . '</option>';
                                                     }
                                                 }
                                                 ?>
@@ -387,16 +419,20 @@ $food = $result->fetch_assoc();
                                             <input type="text" class="form-control" id="food_name" name="food_name" value="<?php echo htmlspecialchars($food['food_name']); ?>" readonly>
                                         </div>
                                         <div class="form-group">
-                                            <label for="restaurant_id">Nama Restoran :</label>
-                                            <select id="restaurant_id" name="restaurant_id" class="form-control" disabled>
-                                                <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
+                                            <label for="restaurant_id">Nama Restoran:</label>
+                                            <select id="restaurant_id" name="restaurant_id" class="form-control" <?php echo $role === 'Admin' ? '' : 'disabled'; ?>>
                                                 <?php
-                                                // Pastikan file koneksi di-include
-                                                $sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant WHERE restaurant_id = 2";
-                                                $result_restaurant = $koneksi->query($sql_restaurant);
-                                                if ($result_restaurant->num_rows > 0) {
-                                                    while ($row = $result_restaurant->fetch_assoc()) {
-                                                        echo "<option value='" . $row['restaurant_id'] . "'>" . $row['restaurant_name'] . "</option>";
+                                                // Query untuk mengambil semua nama restoran
+                                                $sql_restaurants = "SELECT restaurant_id, restaurant_name FROM restaurant";
+                                                $result_restaurants = $koneksi->query($sql_restaurants);
+                                                if ($result_restaurants->num_rows > 0) {
+                                                    while ($row_restaurant = $result_restaurants->fetch_assoc()) {
+                                                        // Ubah opsi pada dropbox untuk mencakup semua nama restoran
+                                                        echo '<option value="' . $row_restaurant['restaurant_id'] . '"';
+                                                        if ($food['restaurant_name'] === $row_restaurant['restaurant_name']) {
+                                                            echo ' selected';
+                                                        }
+                                                        echo '>' . htmlspecialchars($row_restaurant['restaurant_name']) . '</option>';
                                                     }
                                                 }
                                                 ?>
@@ -435,11 +471,13 @@ $food = $result->fetch_assoc();
 
             // Menghapus atribut disabled pada dropdown restaurant saat tombol edit diklik
             document.getElementById('restaurant_id').removeAttribute('disabled');
+            document.getElementById('category_id').removeAttribute('disabled');
         });
 
         // Menjadikan dropdown readonly saat halaman dimuat
         window.onload = function() {
             document.getElementById('restaurant_id').setAttribute('disabled', 'disabled');
+            document.getElementById('category_id').setAttribute('disabled', 'disabled');
         };
 
         document.getElementById('save-data-btn').addEventListener('click', function() {

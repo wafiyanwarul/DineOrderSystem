@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // If upload failed
         $_SESSION['notification'] = [
             'type' => 'danger',
-            'message' => "Data Makanan $food_name gagal ditambahkan karena tipe file tidak sesuai ['jpg','png','jpeg','gif']"
+            'message' => "Data Minuman $food_name gagal ditambahkan karena tipe file tidak sesuai ['jpg','png','jpeg','gif']"
         ];
     } else {
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
@@ -54,22 +54,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($koneksi->query($sql) === TRUE) {
                 $_SESSION['notification'] = [
                     'type' => 'success',
-                    'message' => "Data Makanan $food_name berhasil ditambahkan."
+                    'message' => "Data Minuman $food_name berhasil ditambahkan."
                 ];
             } else {
                 $_SESSION['notification'] = [
                     'type' => 'danger',
-                    'message' => "Data Makanan $food_name gagal ditambahkan: " . $koneksi->error
+                    'message' => "Data Minuman $food_name gagal ditambahkan: " . $koneksi->error
                 ];
             }
         } else {
             $_SESSION['notification'] = [
                 'type' => 'danger',
-                'message' => "Data Makanan $food_name gagal ditambahkan."
+                'message' => "Data Minuman $food_name gagal ditambahkan."
             ];
         }
     }
 
-    header("Location: ../templates/add_food.php");
+    header("Location: ../templates/add_drink.php");
     exit();
 }

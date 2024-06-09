@@ -1,9 +1,3 @@
-<!--
-*
-*  INSPINIA - Responsive Admin Theme
-*  version 2.7
-*
--->
 <?php
 session_start();
 include('../includes/db_connect.php'); // Ganti dengan file koneksi database Anda
@@ -11,7 +5,6 @@ error_reporting(E_ALL ^ (E_NOTICE | E_WARNING));
 if (!isset($_SESSION['username'])) {
     die("<h1><center>Anda belum login</h1></center>");
 }
-
 // Mendapatkan data user dari session atau database
 $username = $_SESSION['username'];
 $sql = "SELECT username, level FROM user WHERE username = '$username'";
@@ -30,17 +23,15 @@ if ($level == 'customer') {
 }
 ?>
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Dashboard</title>
+    <title>Dine In Hub | Foods</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -63,9 +54,12 @@ if ($level == 'customer') {
 
     <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
     <link href="../assets/inspinia/css/style.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/inspinia/css/plugins/codemirror/codemirror.css" rel="stylesheet">
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/ce1fc2061c.js" crossorigin="anonymous"></script>
+
 
 </head>
 
@@ -89,7 +83,7 @@ if ($level == 'customer') {
                             </a>
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="../templates/profile.php">Profile</a></li>
-                                <li><a href="./dashboard.php">Dashboard</a></li>
+                                <li><a href="contacts.html">Dashboard</a></li>
                                 <li class="divider"></li>
                                 <li><a href="../templates/logout.php">Logout</a></li>
                             </ul>
@@ -100,7 +94,7 @@ if ($level == 'customer') {
                     </li>
 
                     <!-- Dashboard - Home -->
-                    <li class="active">
+                    <li>
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
@@ -113,11 +107,11 @@ if ($level == 'customer') {
                     </li>
                     <!-- Foods -->
                     <li>
-                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
-                    <li>
-                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
+                    <li class="active">
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -129,7 +123,10 @@ if ($level == 'customer') {
                     </li>
                     <!-- Gallery -->
                     <li>
-                        <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
+                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="contacts.html">Contacts</a></li>
+                        </ul>
                     </li>
                     <!-- Vouchers -->
                     <li>
@@ -146,6 +143,9 @@ if ($level == 'customer') {
                     <!-- Ratings -->
                     <li>
                         <a href="#"><i class="fa-solid fa-star"></i> <span class="nav-label">Ratings</span><span class="label label-info pull-right">NEW</span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="toastr_notifications.html">Notification</a></li>
+                        </ul>
                     </li>
                 </ul>
 
@@ -222,164 +222,148 @@ if ($level == 'customer') {
             <!-- Header Dashboard -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Home</h2>
+                    <h2>Drinks</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./dashboard.php">Home</a>
+                            <a href="./drinks.php">Drinks</a>
                         </li>
-                        <!-- <li class="active">
-                            <strong>Profile</strong>
-                        </li> -->
+                        <li class="active">
+                            <strong>Add Drink</strong>
+                        </li>
                     </ol>
                 </div>
                 <div class="col-lg-2">
                 </div>
             </div>
-            <!-- View for User Admin Role -->
+
             <?php if ($level == 'admin') { ?>
-                <div class="row wrapper-content animated-fadeInRight">
-                    <div class="col-lg-12 ">
-                        <div class="ibox-title">
-                            <h2>Hi Admin <strong><?php echo htmlspecialchars($username) ?></strong>! Welcome to Dine In Hub </h2>
-                        </div>
-                        <div class="ibox-title bg-primary">
-                            <h2><strong>Kelola Sistem Pemesanan Makanan Dine In Anda</strong></h2>
-                        </div>
-                        <div class="ibox-content">
-                            <p>Kelola restoran makanan anda kapanpun, dimanapun. Cmiiw</p>
-                            <div class="row">
-                                <div class="col-md-4 border-top border-left p-xs">
-                                    <h3> Manage Restaurants </h3>
-                                    <small>Kelola restoran Anda dengan mudah. Tambahkan, edit, dan hapus informasi restoran untuk memastikan pelanggan mendapatkan pengalaman terbaik</small>
-                                    <a href="./restaurants.php" class="btn btn-info btn-lg btn-block m-t">Manage Restaurants</a>
+                <div class="wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-lg-8 b-r">
+                            <?php if (isset($_SESSION['notification'])) : ?>
+                                <?php if ($_SESSION['notification']['type'] == 'success') : ?>
+                                    <div id="alert-image-success" class="alert alert-success alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <?= $_SESSION['notification']['message'] ?>
+                                    </div>
+                                <?php else : ?>
+                                    <div id="alert-image-danger" class="alert alert-danger alert-dismissable">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <?= $_SESSION['notification']['message'] ?>
+                                    </div>
+                                <?php endif; ?>
+                                <?php unset($_SESSION['notification']); ?>
+                            <?php endif; ?>
+                            <div class="ibox">
+                                <div class="ibox-title bg-success">
+                                    <h1 class="m-t-none m-b">Tambah Minuman</h1>
+                                    <p>Minuman yang ditambahkan akan dapat dilihat di menu customer</p>
                                 </div>
-                                <div class="col-md-4 border-top border-left-right p-xs">
-                                    <h3> Manage Foods </h3>
-                                    <small>Atur menu makanan dengan fleksibel. Tambahkan berbagai jenis hidangan, perbarui harga, dan pastikan setiap hidangan tersaji sesuai standar restoran Anda</small>
-                                    <a href="./foods.php" class="btn btn-warning btn-lg btn-block m-t">Manage Foods</a>
-                                </div>
-                                <div class="col-md-4 border-top border-right p-xs">
-                                    <h3> Manage Drinks </h3>
-                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="./drinks.php" class="btn btn-success btn-lg btn-block m-t">Manage Drinks</a>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4 border-left border-top-bottom p-xs">
-                                    <h3> Manage Categories </h3>
-                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="./categories.php" class="btn btn-outline btn-info btn-lg btn-block m-t">Manage Categories</a>
-                                </div>
-                                <div class="col-md-4 border-left-right border-top-bottom p-xs">
-                                    <h3> Manage Users </h3>
-                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="./users.php" class="btn btn-outline btn-warning btn-lg btn-block m-t">Manage Users</a>
-                                </div>
-                                <div class="col-md-4 border-right border-top-bottom p-xs">
-                                    <h3> Manage Customers </h3>
-                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="./customers.php" class="btn btn-outline btn-success btn-lg btn-block m-t">Manage Customers</a>
+                                <div class="ibox-content">
+                                    <form action="../actions/add_drink_action.php" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="restaurant_id">Pilih Restoran:</label>
+                                            <select id="restaurant_id" name="restaurant_id" class="form-control" required>
+                                                <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
+                                                <?php
+                                                include('../includes/db_connect.php'); // Pastikan file koneksi di-include
+                                                $sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant";
+                                                $result_restaurant = $koneksi->query($sql_restaurant);
+                                                if ($result_restaurant->num_rows > 0) {
+                                                    while ($row = $result_restaurant->fetch_assoc()) {
+                                                        echo "<option value='" . $row['restaurant_id'] . "'>" . $row['restaurant_name'] . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="category_id">Pilih Kategori:</label>
+                                            <select id="category_id" name="category_id" class="form-control" required>
+                                                <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
+                                                <?php
+                                                $sql_category = "SELECT category_id, category_name FROM Category";
+                                                $result_category = $koneksi->query($sql_category);
+                                                // Periksa apakah query berhasil
+                                                if (!$result_category) {
+                                                    die("Error executing category query: " . $koneksi->error);
+                                                }
+                                                // Menyimpan hasil query ke dalam array
+                                                $categories = [];
+                                                if ($result_category->num_rows > 0) {
+                                                    while ($row = $result_category->fetch_assoc()) {
+                                                        $categories[] = $row;
+                                                    }
+                                                }
+                                                $result_category = $koneksi->query($sql_category);
+                                                if ($result_category->num_rows > 0) {
+                                                    while ($row = $result_category->fetch_assoc()) {
+                                                        echo "<option value='" . $row['category_id'] . "'>" . $row['category_name'] . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="food_name">Nama Menu:</label>
+                                            <input type="text" id="food_name" name="food_name" class="form-control" placeholder="Enter food name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="price">Harga:</label>
+                                            <input type="text" id="price" name="price" class="form-control" placeholder="Enter price" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Deskripsi:</label>
+                                            <textarea id="description" name="description" class="form-control" placeholder="Enter description" required></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="image">Gambar:</label>
+                                            <div class="form-group">
+                                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                                    <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input type="file" id="file" name="image"></span>
+                                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-block">Tambah Minuman</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
         </div>
 
-        <!-- View for User Customer Role -->
     <?php } elseif ($level == 'customer') { ?>
 
-        <div class="wrapper wrapper-content page-heading">
-            <div class="row m-t-lg">
-                <div class="col-md-6">
-                    <div class="ibox-title dashboard-header">
-                        <h2>Welcome <strong><?php echo htmlspecialchars($username); ?></strong></h2>
-                    </div>
-                    <div class="ibox-content ">
-                        <small>Here's the step how to order food:</small>
-                        <ul class="list-group clear-list m-t">
-                            <li class="list-group-item fist-item">
-                                <span class="label label-info">1</span> Choose your restaurant
-                            </li>
-                            <li class="list-group-item">
-                                <span class="label label-info">2</span> Choose your menu type
-                            </li>
-                            <li class="list-group-item">
-                                <span class="label label-info">3</span> Choose your detail menu
-                            </li>
-                            <li class="list-group-item">
-                                <span class="label label-info">4</span> Complete your order payment
-                            </li>
-                            <li class="list-group-item">
-                                <span class="label label-info">5</span> Check your payment status
-                            </li>
-                            <li class="list-group-item">
-                                <span class="label label-info">6</span> The kitchen will prepare your order according to the queue
-                            </li>
-                            <li class="list-group-item">
-                                <span class="label label-info">7</span> Your order will be delivered to your table
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="ibox-title dashboard-header">
-                        <h2><strong>Here is Our Top Menu</strong></h2>
-                    </div>
-                    <div class="ibox-content ">
-                        <small>Choose your taste</small>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="row m-t-lg">
-                <div class="col-lg-6">
-                    <div class="ibox">
-                        <div class="ibox-title">
-                            <a href="./profile.php">
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <h2><i class="fa-solid fa-id-card m-r"></i></h2>
-                                        </td>
-                                        <td>
-                                            <h2><strong>Edit Your Profile</strong></h2>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </a>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-
-        </div>
     <? } else { ?>
+        <!-- Code if user isn't customer and admin role -->
     <?php } ?>
+
     </div>
-    </div>
-    </div>
+
+    <!-- Script for Dropzone File Upload -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.2.7/js/fileinput.min.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="../assets/inspinia/js/inspinia.js"></script>
+    <script src="../assets/inspinia/js/plugins/pace/pace.min.js"></script>
+
+    <!-- Jasny -->
+    <script src="../assets/inspinia/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+
+    <!-- CodeMirror -->
+    <script src="../assets/inspinia/js/plugins/codemirror/codemirror.js"></script>
+    <script src="../assets/inspinia/js/plugins/codemirror/mode/xml/xml.js"></script>
 
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>
     <script src="../assets/inspinia/js/bootstrap.min.js"></script>
     <script src="../assets/inspinia/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="../assets/inspinia/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
-    <!-- Flot -->
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.spline.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.resize.js"></script>
-    <script src="../assets/inspinia/js/plugins/flot/jquery.flot.pie.js"></script>
-
-    <!-- Peity -->
-    <script src="../assets/inspinia/js/plugins/peity/jquery.peity.min.js"></script>
-    <script src="../assets/inspinia/js/demo/peity-demo.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="../assets/inspinia/js/inspinia.js"></script>
@@ -391,33 +375,8 @@ if ($level == 'customer') {
     <!-- GITTER -->
     <script src="../assets/inspinia/js/plugins/gritter/jquery.gritter.min.js"></script>
 
-    <!-- Sparkline -->
-    <script src="../assets/inspinia/js/plugins/sparkline/jquery.sparkline.min.js"></script>
-
-    <!-- Sparkline demo data  -->
-    <script src="../assets/inspinia/js/demo/sparkline-demo.js"></script>
-
-    <!-- ChartJS-->
-    <script src="../assets/inspinia/js/plugins/chartJs/Chart.min.js"></script>
-
     <!-- Toastr -->
     <script src="../assets/inspinia/js/plugins/toastr/toastr.min.js"></script>
-
-
-    <script>
-        $(document).ready(function() {
-            setTimeout(function() {
-                toastr.options = {
-                    closeButton: true,
-                    progressBar: true,
-                    showMethod: 'slideDown',
-                    timeOut: 4000
-                };
-                toastr.success('Hey, Taste Explorer!', 'Welcome to Dine In HUB');
-
-            }, 1300);
-        });
-    </script>
 </body>
 
 </html>

@@ -16,10 +16,29 @@ $level = $user['level'] ?? 'unknown';
 
 if ($level == 'customer') {
     $role = 'Customer';
-} else if ($level == 'admin') {
+} elseif ($level == 'admin') {
     $role = 'Admin';
 } else {
     $role = 'Unknown';
+}
+
+$sql_customer = "SELECT
+                    customer.customer_id,
+                    customer.user_id,
+                    customer.phone,
+                    customer.address,
+                    user.username
+                FROM
+                    customer
+                JOIN
+                    user ON customer.user_id = user.user_id";
+
+$result = $koneksi->query($sql_customer);
+
+$customer = $result->fetch_assoc();
+
+if (!$customer) {
+    die("Data tidak ditemukan.");
 }
 ?>
 
@@ -101,7 +120,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-success pull-right">16/24</span></a>
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-success pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -278,7 +297,7 @@ if ($level == 'customer') {
                             <a href="index.html">Home</a>
                         </li>
                         <li class="active">
-                            <strong>Profile</strong>
+                            <strong>Profile <?php echo $username ?></strong>
                         </li>
                     </ol>
                 </div>
@@ -286,88 +305,237 @@ if ($level == 'customer') {
 
                 </div>
             </div>
-            <div class="wrapper wrapper-content">
-                <div class="row animated fadeInRight">
-                    <div class="col-md-4">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Profile Detail</h5>
+            <?php if ($level === 'admin') { ?>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Profile Detail</h5>
+                                </div>
+                                <div class="ibox-content no-padding border-left-right">
+                                    <img alt="image" class="img-responsive" src="../assets/images/dine_in_hub_logo.png">
+                                </div>
+                                <div class="ibox-content profile-content">
+                                    <!-- Notification Alert UI for Multi Insert Voucher  -->
+                                    <?php if (isset($_GET['status'])) : ?>
+                                        <?php if ($_GET['status'] == 'success') : ?>
+                                            <div id="alert-data-success" class="alert alert-success alert-dismissable">
+                                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                                <span id="success-message">Data berhasil diperbarui.</span>
+                                            </div>
+                                        <?php elseif ($_GET['status'] == 'error') : ?>
+                                            <div id="alert-data-danger" class="alert alert-danger alert-dismissable">
+                                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                                <span id="error-message">Data gagal diperbarui.</span>
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    <form id="profileForm" action="../actions/update_profile_action.php" method="post">
+                                        <?php
+                                        $sql_customer = "SELECT
+                                            customer.customer_id,
+                                            customer.user_id,
+                                            customer.phone,
+                                            customer.address,
+                                            user.username
+                                        FROM
+                                            customer
+                                        JOIN
+                                            user ON customer.user_id = user.user_id
+                                        WHERE
+                                            user.username = '$username'"; // Memodifikasi query untuk hanya mengambil data customer yang sesuai dengan username yang sedang login
+                                        $result = $koneksi->query($sql_customer);
+                                        $customer = $result->fetch_assoc();
+                                        $phone = htmlspecialchars($customer['phone'] ?? '');
+                                        $address = htmlspecialchars($customer['address'] ?? '');
+                                        $edit_disabled = ($phone === '' && $address === '') ? 'disabled' : ''; // Tombol edit dinonaktifkan jika phone dan address kosong
+                                        ?>
+                                        <div class="form-group">
+                                            <label for="username">Username</label>
+                                            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+                                            <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <textarea class="form-control" id="address" name="address" disabled><?php echo $address; ?></textarea>
+                                        </div>
+                                        <div class="user-button">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <button type="button" id="editButton" class="btn btn-primary btn-sm btn-block" <?php echo $edit_disabled; ?>>Edit</button>
+                                                    <button type="submit" id="saveButton" class="btn btn-primary btn-sm btn-block" style="display: none;">Save</button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <a href="./add_new_profile.php">
+                                                        <button type="button" class="btn btn-success btn-sm btn-block"><i class="fa fa-user"></i> Add Profile</button>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                            <div>
+
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const editButton = document.getElementById('editButton');
+                                    const saveButton = document.getElementById('saveButton');
+                                    const phoneField = document.getElementById('phone');
+                                    const addressField = document.getElementById('address');
+
+                                    editButton.addEventListener('click', function() {
+                                        editButton.style.display = 'none'; // Sembunyikan tombol Edit
+                                        saveButton.style.display = 'block'; // Tampilkan tombol Save
+                                        phoneField.disabled = false; // Mengaktifkan field phone
+                                        addressField.disabled = false; // Mengaktifkan field address
+                                    });
+
+                                    // Menampilkan notifikasi berdasarkan status
+                                    const urlParams = new URLSearchParams(window.location.search);
+                                    const status = urlParams.get('status');
+                                    if (status === 'success') {
+                                        document.getElementById('alert-data-success').style.display = 'block';
+                                    } else if (status === 'error') {
+                                        document.getElementById('alert-data-danger').style.display = 'block';
+                                    }
+
+                                    // Menyembunyikan notifikasi setelah beberapa detik
+                                    setTimeout(function() {
+                                        const successAlert = document.getElementById('alert-data-success');
+                                        const errorAlert = document.getElementById('alert-data-danger');
+                                        if (successAlert) successAlert.style.display = 'none';
+                                        if (errorAlert) errorAlert.style.display = 'none';
+                                    }, 3000);
+                                });
+                            </script>
+
+
+
+                        </div>
+                        <div class="col-md-8">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Activites</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+                                        <div class="feed-activity-list">
+                                            <!-- User Activities Here -->
+                                            <center>
+                                                <h2>No activities Here</h2>
+                                            </center>
+                                        </div>
+
+                                        <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php } elseif ($level == 'customer') { ?>
+                <div class="wrapper wrapper-content animated fadeInRight">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Profile Detail</h5>
+                                </div>
                                 <div class="ibox-content no-padding border-left-right">
                                     <img alt="image" class="img-responsive" src="../assets/inspinia/img/profile_big.jpg">
                                 </div>
                                 <div class="ibox-content profile-content">
-                                    <h4><strong><?php echo htmlspecialchars($username); ?></strong></h4>
-                                    <p><i class="fa fa-map-marker"></i> Malang, Indonesia</p>
-                                    <h5>
-                                        <?php echo htmlspecialchars($role) ?>
-                                    </h5>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitat.
-                                    </p>
-                                    <div class="user-button">
-                                        <div class="row">
-                                            <?php if ($user == 'customer') { ?>
+                                    <!-- Notification Alert UI for Multi Insert Voucher  -->
+                                    <div id="alert-data-success" class="alert alert-success alert-dismissable" style="display: none;">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <span id="success-message">Data berhasil diperbarui.</span>
+                                    </div>
+                                    <div id="alert-data-danger" class="alert alert-danger alert-dismissable" style="display: none;">
+                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                        <span id="error-message">Data gagal diperbarui.</span>
+                                    </div>
+                                    <form id="profileForm" action="../actions/update_profile_action.php" method="post">
+                                        <div class="form-group">
+                                            <label for="username">Username</label>
+                                            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($customer['username']); ?>" disabled>
+                                        </div>
+                                        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($customer['user_id']); ?>">
+
+                                        <div class="form-group">
+                                            <label for="phone">Phone</label>
+                                            <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($customer['phone']); ?>" disabled>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="address">Address</label>
+                                            <textarea class="form-control" id="address" name="address" disabled><?php echo htmlspecialchars($customer['address']); ?></textarea>
+                                        </div>
+                                        <div class="user-button">
+                                            <div class="row">
                                                 <div class="col-md-6">
-                                                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
+                                                    <button type="button" id="editButton" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
+                                                    <button type="submit" id="saveButton" class="btn btn-primary btn-sm btn-block" style="display: none;"><i class="fa fa-save"></i> Save</button>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button>
                                                 </div>
-                                            <?php } else { ?>
-                                                <div class="col-md-6">
-                                                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
-                                                </div>
-                                            <?php } ?>
+                                            </div>
                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>Activites</h5>
+                                    <div class="ibox-tools">
+                                        <a class="collapse-link">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </a>
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                            <i class="fa fa-wrench"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-user">
+                                            <li><a href="#">Config option 1</a>
+                                            </li>
+                                            <li><a href="#">Config option 2</a>
+                                            </li>
+                                        </ul>
+                                        <a class="close-link">
+                                            <i class="fa fa-times"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="ibox-content">
+                                    <div>
+                                        <div class="feed-activity-list">
+                                            <!-- User Activities Here -->
+                                            <center>
+                                                <h2>No activities Here</h2>
+                                            </center>
+                                        </div>
+                                        <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>Activites</h5>
-                                <div class="ibox-tools">
-                                    <a class="collapse-link">
-                                        <i class="fa fa-chevron-up"></i>
-                                    </a>
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                        <i class="fa fa-wrench"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-user">
-                                        <li><a href="#">Config option 1</a>
-                                        </li>
-                                        <li><a href="#">Config option 2</a>
-                                        </li>
-                                    </ul>
-                                    <a class="close-link">
-                                        <i class="fa fa-times"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="ibox-content">
-
-                                <div>
-                                    <div class="feed-activity-list">
-                                        <!-- User Activities Here -->
-                                        <center>
-                                            <h2>No activities Here</h2>
-                                        </center>
-                                    </div>
-
-                                    <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
-
-                                </div>
-
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-            </div>
+            <?php } else { ?>
+            <?php } ?>
             <div class="footer">
                 <div class="pull-right">
                     10GB of <strong>250GB</strong> Free.
@@ -379,8 +547,51 @@ if ($level == 'customer') {
 
         </div>
     </div>
+    <script>
+        document.getElementById('editButton').addEventListener('click', function() {
+            // Enable all form fields except username
+            document.getElementById('phone').disabled = false;
+            document.getElementById('address').disabled = false;
 
+            // Show the Save button and hide the Edit button
+            document.getElementById('editButton').style.display = 'none';
+            document.getElementById('saveButton').style.display = 'block';
+        });
 
+        document.getElementById('profileForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            var formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    document.getElementById('alert-data-success').style.display = 'block';
+                    setTimeout(function() {
+                        location.reload(); // Refresh halaman setelah 1 detik
+                    }, 1000);
+                } else {
+                    document.getElementById('alert-data-danger').style.display = 'block';
+                    setTimeout(function() {
+                        location.reload(); // Refresh halaman setelah 1 detik
+                    }, 1000);
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                document.getElementById('alert-data-danger').style.display = 'block';
+                setTimeout(function() {
+                    location.reload(); // Refresh halaman setelah 1 detik
+                }, 1000);
+            });
+
+            document.getElementById('phone').disabled = true;
+            document.getElementById('address').disabled = true;
+            document.getElementById('editButton').style.display = 'block';
+            document.getElementById('saveButton').style.display = 'none';
+        });
+    </script>
 
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>

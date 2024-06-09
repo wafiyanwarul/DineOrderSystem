@@ -21,21 +21,6 @@ if ($level == 'customer') {
 } else {
     $role = 'Unknown';
 }
-
-// Ambil data restoran
-$sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant";
-$result_restaurant = $koneksi->query($sql_restaurant);
-
-if (!$result_restaurant) {
-    die("Error executing restaurant query: " . $koneksi->error);
-}
-
-$restaurants = [];
-if ($result_restaurant->num_rows > 0) {
-    while ($row = $result_restaurant->fetch_assoc()) {
-        $restaurants[] = $row;
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -126,7 +111,7 @@ if ($result_restaurant->num_rows > 0) {
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -281,7 +266,7 @@ if ($result_restaurant->num_rows > 0) {
                                             <select id="restaurant_id" name="restaurant_id" class="form-control" required>
                                                 <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
                                                 <?php
-                                                include 'koneksi.php'; // Pastikan file koneksi di-include
+                                                include('../includes/db_connect.php'); // Pastikan file koneksi di-include
                                                 $sql_restaurant = "SELECT restaurant_id, restaurant_name FROM restaurant";
                                                 $result_restaurant = $koneksi->query($sql_restaurant);
                                                 if ($result_restaurant->num_rows > 0) {
@@ -293,7 +278,34 @@ if ($result_restaurant->num_rows > 0) {
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="food_name">Nama Makanan:</label>
+                                            <label for="category_id">Pilih Kategori:</label>
+                                            <select id="category_id" name="category_id" class="form-control" required>
+                                                <!-- Ambil data restoran dari database dan tampilkan sebagai opsi -->
+                                                <?php
+                                                $sql_category = "SELECT category_id, category_name FROM Category";
+                                                $result_category = $koneksi->query($sql_category);
+                                                // Periksa apakah query berhasil
+                                                if (!$result_category) {
+                                                    die("Error executing category query: " . $koneksi->error);
+                                                }
+                                                // Menyimpan hasil query ke dalam array
+                                                $categories = [];
+                                                if ($result_category->num_rows > 0) {
+                                                    while ($row = $result_category->fetch_assoc()) {
+                                                        $categories[] = $row;
+                                                    }
+                                                }
+                                                $result_category = $koneksi->query($sql_category);
+                                                if ($result_category->num_rows > 0) {
+                                                    while ($row = $result_category->fetch_assoc()) {
+                                                        echo "<option value='" . $row['category_id'] . "'>" . $row['category_name'] . "</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="food_name">Nama Menu:</label>
                                             <input type="text" id="food_name" name="food_name" class="form-control" placeholder="Enter food name" required>
                                         </div>
                                         <div class="form-group">

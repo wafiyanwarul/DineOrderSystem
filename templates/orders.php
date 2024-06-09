@@ -110,7 +110,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>

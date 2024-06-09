@@ -110,7 +110,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- Drinks -->
                     <li>
-                        <a href="mailbox.html"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -509,6 +509,7 @@ if ($level == 'customer') {
 
     </div>
     </div>
+
     <!-- Script to handle Multi Insert Vouchers -->
     <script>
         document.getElementById('voucherForm').addEventListener('submit', function(event) {
@@ -659,7 +660,7 @@ if ($level == 'customer') {
                     showMethod: 'slideDown',
                     timeOut: 4000
                 };
-                toastr.success('Orders Page!', 'Dine In HUB');
+                toastr.success('Vouchers Page!', 'Dine In HUB');
 
             }, 1300);
         });

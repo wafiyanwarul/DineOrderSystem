@@ -46,7 +46,7 @@ $sql_food = "SELECT
     JOIN 
         category ON food.category_id = category.category_id
     WHERE 
-        food.category_id = 1";
+        food.category_id = 2";
 
 $result_food = $koneksi->query($sql_food);
 
@@ -70,7 +70,7 @@ if ($result_food->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Foods</title>
+    <title>Dine In Hub | Drinks</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -141,11 +141,11 @@ if ($result_food->num_rows > 0) {
                         <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
-                    <li class="active">
+                    <li>
                         <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                         </liؤ>
                         <!-- Drinks -->
-                    <li>
+                    <li class="active">
                         <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span><span class="label label-warning pull-right">16/24</span></a>
                     </li>
                     <!-- Appetizers -->
@@ -251,10 +251,10 @@ if ($result_food->num_rows > 0) {
             <!-- Header Dashboard -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-lg-10">
-                    <h2>Foods</h2>
+                    <h2>Drinks</h2>
                     <ol class="breadcrumb">
                         <li>
-                            <a href="./foods.php">Foods</a>
+                            <a href="./drinks.php">Drinks</a>
                         </li>
                         <!-- <li class="active">
                             <strong>Restaurants</strong>
@@ -269,27 +269,27 @@ if ($result_food->num_rows > 0) {
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="ibox">
-                                <div class="ibox-title bg-warning">
-                                    <h2><strong>Dine In Hub | Manage Foods</strong></h2>
+                                <div class="ibox-title bg-info">
+                                    <h2><strong>Dine In Hub | Manage Drinks</strong></h2>
                                 </div>
                                 <div class="ibox-content m-b-lg">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <p>Kelola makanan restoran Anda </p>
+                                            <p>Kelola minuman restoran Anda </p>
                                         </div>
                                         <div class="col-lg-6">
                                             <a href="javascript:void(0);" onclick="toggleDeleteMode()">
                                                 <div class="btn btn-danger btn-block b-r-xl m-t-md">
                                                     <h1><i class="fa-solid fa-minus"></i></h1>
-                                                    <h3 class="m-b-xs"><strong>HAPUS MAKANAN</strong></h3>
+                                                    <h3 class="m-b-xs"><strong>HAPUS MINUMAN</strong></h3>
                                                 </div>
                                             </a>
                                         </div>
                                         <div class="col-lg-6">
-                                            <a href="./add_food.php">
+                                            <a href="./add_drink.php">
                                                 <div class="btn btn-success btn-block b-r-xl m-t-md">
                                                     <h1><i class="fa-solid fa-plus"></i></h1>
-                                                    <h3 class="m-b-xs"><strong>TAMBAH MAKANAN</strong></h3>
+                                                    <h3 class="m-b-xs"><strong>TAMBAH MINUMAN</strong></h3>
                                                 </div>
                                             </a>
                                         </div>
@@ -310,7 +310,7 @@ if ($result_food->num_rows > 0) {
                                                 <div class="col-lg-3">
                                                     <div class="contact-box center-version">
                                                         <input type="checkbox" name="food_ids[]" value="<?= $food['food_id'] ?>" class="delete-checkbox" style="display: none;">
-                                                        <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
+                                                        <a href="./drink_detail.php?id=<?php echo $food['food_id']; ?>">
                                                             <h3 class="m-b-xs"><strong><?= htmlspecialchars($food['food_name']) ?></strong></h3><br>
                                                             <img alt="image" class="img-fluid img-circle" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" src="<?= htmlspecialchars($food['food_image']) ?>"><br>
                                                             <div class="font-bold">Rp. <?= htmlspecialchars($food['price']) ?></div>
@@ -318,8 +318,6 @@ if ($result_food->num_rows > 0) {
                                                                 <strong><?= htmlspecialchars($food['restaurant_name']) ?></strong><br>
                                                                 <p><?= htmlspecialchars($food['food_description']) ?></p>
                                                                 <p><strong><?= htmlspecialchars($food['category_name'])?></strong></p>
-
-                                                            
                                                             </address>
                                                         </a>
                                                         <div class="contact-box-footer">
@@ -339,29 +337,31 @@ if ($result_food->num_rows > 0) {
                         </div>
                     </div>
                 </div>
+                
+                <!-- View for Customer Drink -->
             <?php } elseif ($level == 'customer') { ?>
                 <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="ibox">
-                                <div class="ibox-title bg-warning">
-                                    <h2><strong>Dine In Hub | Foods</strong></h2>
+                                <div class="ibox-title bg-info">
+                                    <h2><strong>Dine In Hub | Drinks</strong></h2>
                                 </div>
                                 <div class="ibox-content m-b-lg">
                                     <div class="row">
                                         <div class="col-lg-12">
-                                            <p>Selamat memilih makanan favorit Anda </p>
+                                            <p>Selamat memilih minuman favorit Anda </p>
                                         </div>
                                     </div>
                                 </div>
-                                <form id="deleteForm" action="../actions/delete_food_action.php" method="post">
+                                <form id="deleteForm" action="../actions/delete_drink_action.php" method="post">
                                     <div class="row">
                                         <?php if (!empty($foods)) : ?>
                                             <?php foreach ($foods as $food) : ?>
                                                 <div class="col-lg-3">
                                                     <div class="contact-box center-version">
                                                         <input type="checkbox" name="food_ids[]" value="<?= $food['food_id'] ?>" class="delete-checkbox" style="display: none;">
-                                                        <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>">
+                                                        <a href="./drink_detail.php?id=<?php echo $food['food_id']; ?>">
                                                             <h3 class="m-b-xs"><strong><?= htmlspecialchars($food['food_name']) ?></strong></h3><br>
                                                             <img alt="image" class="img-fluid img-circle" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" src="<?= htmlspecialchars($food['food_image']) ?>"><br>
                                                             <div class="font-bold">Rp. <?= htmlspecialchars($food['price']) ?></div>
@@ -373,7 +373,7 @@ if ($result_food->num_rows > 0) {
                                                         </a>
                                                         <div class="contact-box-footer">
                                                             <div class="m-t-xs btn-group">
-                                                                <a href="./food_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> View Food </a>
+                                                                <a href="./drink_detail.php?id=<?php echo $food['food_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa-cart-shopping"></i> View Food </a>
                                                             </div>
                                                         </div>
                                                     </div>
