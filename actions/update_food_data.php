@@ -9,18 +9,19 @@ if (!isset($_SESSION['username'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Periksa apakah semua input tersedia
-    if (!isset($_POST['food_id'], $_POST['restaurant_id'], $_POST['food_name'], $_POST['price'], $_POST['description'])) {
+    if (!isset($_POST['food_id'], $_POST['restaurant_id'], $_POST['category_id'], $_POST['food_name'], $_POST['price'], $_POST['description'])) {
         echo json_encode(['success' => false, 'message' => 'Invalid input']);
         exit;
     }
 
     $food_id = $_POST['food_id'];
     $restaurant_id = $_POST['restaurant_id'];
+    $category_id = $_POST['category_id'];
     $food_name = $_POST['food_name'];
     $price = $_POST['price'];
     $description = $_POST['description'];
 
-    $sql = "UPDATE food SET restaurant_id = ?, food_name = ?, price = ?, description = ? WHERE food_id = ?";
+    $sql = "UPDATE food SET restaurant_id = ?, category_id = ?, food_name = ?, price = ?, description = ? WHERE food_id = ?";
     $stmt = $koneksi->prepare($sql);
 
     if (!$stmt) {
@@ -30,20 +31,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Bind parameter dengan jenis data yang sesuai
-    $stmt->bind_param('isdsi', $restaurant_id, $food_name, $price, $description, $food_id);
+    $stmt->bind_param('iisdsi', $restaurant_id, $category_id, $food_name, $price, $description, $food_id);
 
     if ($stmt->execute()) {
         $_SESSION['notification'] = [
             'type' => 'success',
-            'message' => 'Data makanan berhasil diperbarui.'
+            'message' => 'Data minuman berhasil diperbarui.'
         ];
-        echo json_encode(['success' => true, 'food_name' => $food_name]);
+        echo json_encode(['success' => true, 'food' => $food_name]);
     } else {
         $_SESSION['notification'] = [
             'type' => 'danger',
-            'message' => 'Gagal memperbarui data makanan.'
+            'message' => 'Gagal memperbarui data minuman.'
         ];
-        echo json_encode(['success' => false, 'message' => 'Failed to update food data']);
+        echo json_encode(['success' => false, 'message' => 'Failed to update minuman data']);
     }
 } else {
     $_SESSION['notification'] = [
@@ -52,4 +53,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ];
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
-?>

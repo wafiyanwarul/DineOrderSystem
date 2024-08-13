@@ -148,7 +148,7 @@ $food = $result->fetch_assoc();
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
@@ -181,9 +181,9 @@ $food = $result->fetch_assoc();
                     <li>
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
-                    <!-- History -->
+                    <!-- Payments -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>

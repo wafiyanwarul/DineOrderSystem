@@ -1,0 +1,11 @@
+{
+    "name": "dineordersystem",
+    "description": "DineOrderSystem project",
+    "require": {
+      "php": "^7.4 || ^8.0",
+      "ext-mbstring": "*",
+      "ext-gd": "*",
+      "fpdf/fpdf": "^1.81"
+    }
+  }
+  

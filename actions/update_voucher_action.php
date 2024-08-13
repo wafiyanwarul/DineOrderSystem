@@ -1,5 +1,4 @@
 <?php
-session_start();
 include('../includes/db_connect.php'); // Ganti dengan file koneksi database Anda
 
 $response = array('success' => false);

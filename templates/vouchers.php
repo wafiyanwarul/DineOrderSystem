@@ -102,7 +102,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
@@ -114,11 +114,11 @@ if ($level == 'customer') {
                     </li>
                     <!-- Appetizers -->
                     <li>
-                        <a href="metrics.html"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
+                        <a href="#"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
                     </li>
                     <!-- Desserts -->
                     <li>
-                        <a href="widgets.html"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
+                        <a href="#"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
                     </li>
                     <!-- Gallery -->
                     <li>
@@ -132,9 +132,9 @@ if ($level == 'customer') {
                     <li>
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
-                    <!-- History -->
+                    <!-- Payments -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
@@ -233,16 +233,11 @@ if ($level == 'customer') {
                     <div class="row">
                         <div class="col-lg-12 ">
                             <div class="ibox">
-                                <div class="ibox-title">
-                                    <h2>Hi <strong><?php echo htmlspecialchars($username) ?></strong></h2>
-                                </div>
                                 <div class="ibox-title bg-primary">
-                                    <h2>Welcome to <strong>Dine In Hub | Vouchers Page</strong></h2>
+                                    <h2><strong>Dine In Hub | Vouchers Page</strong></h2>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-lg-12">
                             <!-- Single Insert Form View -->
                             <div class="ibox">
                                 <div class="ibox-title bg-success">
@@ -443,22 +438,15 @@ if ($level == 'customer') {
 
         <!-- View for Customer Role -->
     <?php } elseif ($level == 'customer') { ?>
-        <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="wrapper wrapper-content animated fadeInUp">
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="ibox-title dashboard-header">
-                        <h2>Orders Page | <strong><?php echo htmlspecialchars($username); ?></strong></h2>
-                    </div>
-                    <div class="ibox-content ">
-
-                    </div>
-
-                    <!-- View Data Vouchers -->
                     <div class="ibox">
-                        <div class="ibox-title bg-success">
-                            <h2><strong>Daftar Voucher</strong></h2>
+                        <div class="ibox-title bg-info">
+                            <h2><strong>Dine In Hub | Vouchers Page</strong></h2>
                         </div>
-                        <div class="ibox-content">
+                        <!-- View Data Vouchers -->
+                        <div class="ibox-content ">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -496,7 +484,6 @@ if ($level == 'customer') {
                             </table>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -526,7 +513,7 @@ if ($level == 'customer') {
                         document.getElementById('success-message').textContent = data.message;
                         document.getElementById('alert-data-success').style.display = 'block';
                         setTimeout(function() {
-                            location.reload();
+                            window.location.reload();
                         }, 1000);
                     } else {
                         document.getElementById('error-message').textContent = data.message;
@@ -570,7 +557,7 @@ if ($level == 'customer') {
                     if (data.success) {
                         document.getElementById('alert-data-success').style.display = 'block';
                         setTimeout(function() {
-                            location.reload();
+                            window.location.reload();
                         }, 1000);
                     } else {
                         document.getElementById('alert-data-danger').style.display = 'block';

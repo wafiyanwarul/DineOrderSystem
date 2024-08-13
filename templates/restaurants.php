@@ -121,7 +121,7 @@ if ($result_restaurant->num_rows > 0) {
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
@@ -133,11 +133,11 @@ if ($result_restaurant->num_rows > 0) {
                     </li>
                     <!-- Appetizers -->
                     <li>
-                        <a href="metrics.html"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
+                        <a href="#"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
                     </li>
                     <!-- Desserts -->
                     <li>
-                        <a href="widgets.html"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
+                        <a href="#"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
                     </li>
                     <!-- Gallery -->
                     <li>
@@ -151,9 +151,9 @@ if ($result_restaurant->num_rows > 0) {
                     <li>
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Vouchers</span></a>
                     </li>
-                    <!-- History -->
+                    <!-- Payments -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
@@ -251,22 +251,24 @@ if ($result_restaurant->num_rows > 0) {
             <!-- View for User Admin Role -->
             <?php if ($level == 'admin') { ?>
                 <div class="wrapper wrapper-content animated-fadeInRight">
-                    <div class="col-lg-12">
-                        <div class="ibox-title bg-primary">
-                            <h2><strong>Dine In Hub | Manage Restaurant </strong></h2>
-                        </div>
-                        <div class="ibox-content m-b-none">
-                            <p>Kelola restoran Anda </p>
-                            <a class="bg-success" href="./add_restaurant.php">
-                                <div class="btn btn-success btn-block dim b-r-xl">
-                                    <h1><i class="fa-solid fa-plus"></i></h1>
-                                    <h3 class="m-b-xs"><strong>TAMBAH</strong></h3>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title bg-primary">
+                                    <h2><strong>Dine In Hub | Manage Restaurant </strong></h2>
                                 </div>
-                            </a>
+                                <div class="ibox-content m-b-none">
+                                    <p>Kelola restoran Anda </p>
+                                    <a class="bg-success" href="./add_restaurant.php">
+                                        <div class="btn btn-success btn-block dim b-r-xl">
+                                            <h1><i class="fa-solid fa-plus"></i></h1>
+                                            <h3 class="m-b-xs"><strong>TAMBAH</strong></h3>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
                         <?php if (!empty($restaurants)) : ?>
                             <?php foreach ($restaurants as $restaurant) : ?>
@@ -292,42 +294,53 @@ if ($result_restaurant->num_rows > 0) {
                         <?php endif; ?>
                     </div>
                 </div>
-        </div>
 
-        <!-- View for User Customer Role -->
-    <?php } elseif ($level == 'customer') { ?>
-        <div class="wrapper wrapper-content animated fadeInRight">
-            <div class="row">
-                <?php if (!empty($restaurants)) : ?>
-                    <?php foreach ($restaurants as $restaurant) : ?>
-                        <div class="col-lg-3">
-                            <div class="contact-box center-version">
-                                <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>">
-                                    <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>">
-                                    <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h3>
-                                    <div class="font-bold"><?php echo htmlspecialchars($restaurant['address'] ?? ''); ?></div>
-                                    <address class="m-t-md">
-                                        <strong><?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?></strong><br>
-                                        <p><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></p>
-                                    </address>
-                                </a>
-                                <div class="contact-box-footer">
-                                    <div class="m-t-xs btn-group">
-                                        <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Restaurant </a>
-                                    </div>
+                <!-- View for User Customer Role -->
+            <?php } elseif ($level == 'customer') { ?>
+                <div class="wrapper wrapper-content animated-fadeInDownBig">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="ibox">
+                                <div class="ibox-title bg-primary">
+                                    <h2><strong>Dine In Hub | Restaurants </strong></h2>
+                                </div>
+                                <div class="ibox-content m-b-none">
+                                    <p>Kelola restoran Anda </p>
                                 </div>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
+                    </div>
+                    <div class="row">
+                        <?php if (!empty($restaurants)) : ?>
+                            <?php foreach ($restaurants as $restaurant) : ?>
+                                <div class="col-lg-3">
+                                    <div class="contact-box center-version">
+                                        <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>">
+                                            <img alt="image" style="max-width: 100%; max-height: 100%; object-fit: cover; display: block; margin: 0 auto;" class="img-fluid img-circle" src="../<?php echo htmlspecialchars($restaurant['image'] ?? ''); ?>">
+                                            <h3 class="m-b-xs"><strong><?php echo htmlspecialchars($restaurant['restaurant_name'] ?? ''); ?></strong></h3>
+                                            <div class="font-bold"><?php echo htmlspecialchars($restaurant['address'] ?? ''); ?></div>
+                                            <address class="m-t-md">
+                                                <strong><?php echo htmlspecialchars($restaurant['phone'] ?? ''); ?></strong><br>
+                                                <p><?php echo htmlspecialchars($restaurant['description'] ?? ''); ?></p>
+                                            </address>
+                                        </a>
+                                        <div class="contact-box-footer">
+                                            <div class="m-t-xs btn-group">
+                                                <a href="./restaurant_detail.php?id=<?php echo $restaurant['restaurant_id']; ?>" class="btn btn-xs btn-white bg-info"><i class="fa-solid fa fa-eye"></i> View Restaurant </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <? } else { ?>
+                <!-- Code if user isn't customer and admin role -->
+            <?php } ?>
+
+
         </div>
-    <? } else { ?>
-        <!-- Code if user isn't customer and admin role -->
-    <?php } ?>
-
-
-    </div>
 
 
     </div>

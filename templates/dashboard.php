@@ -104,20 +104,68 @@ if ($level == 'customer') {
                         <a href="./dashboard.php"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span> </a>
                     </li>
                     <!-- Restaurants -->
+                    <?php
+                    // Query untuk menghitung jumlah makanan
+                    $restaurant_count_query = "SELECT COUNT(*) as count FROM restaurant";
+                    $result = $koneksi->query($restaurant_count_query);
+
+                    if ($result) {
+                        $row = $result->fetch_assoc();
+                        $restaurant_count = $row['count'];
+                    } else {
+                        $restaurant_count = 0;
+                    }
+                    ?>
                     <li>
-                        <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span></a>
+                        <a href="./restaurants.php"><i class="fa-solid fa-store"></i> <span class="nav-label">Restaurants</span> <span class="label label-warning pull-right"><?php echo $restaurant_count; ?></span></a>
                     </li>
                     <!-- All Menu -->
+                    <?php
+                    // Query untuk menghitung jumlah makanan
+                    $allfood_count_query = "SELECT COUNT(*) as count FROM food";
+                    $result = $koneksi->query($allfood_count_query);
+
+                    if ($result) {
+                        $row = $result->fetch_assoc();
+                        $allfood_count = $row['count'];
+                    } else {
+                        $allfood_count = 0;
+                    }
+                    ?>
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span> <span class="label label-warning pull-right"><?php echo $allfood_count; ?></span></a>
                     </li>
                     <!-- Foods -->
+                    <?php
+                    // Query untuk menghitung jumlah makanan
+                    $food_count_query = "SELECT COUNT(*) as count FROM food WHERE category_id = 1";
+                    $result = $koneksi->query($food_count_query);
+
+                    if ($result) {
+                        $row = $result->fetch_assoc();
+                        $food_count = $row['count'];
+                    } else {
+                        $food_count = 0;
+                    }
+                    ?>
                     <li>
-                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span> <span class="label label-warning pull-right"><?php echo $food_count; ?></span></a>
                     </li>
                     <!-- Drinks -->
+                    <?php
+                    // Query untuk menghitung jumlah minuman
+                    $drink_count_query = "SELECT COUNT(*) as count FROM food WHERE category_id = 2";
+                    $result = $koneksi->query($drink_count_query);
+
+                    if ($result) {
+                        $row = $result->fetch_assoc();
+                        $drink_count = $row['count'];
+                    } else {
+                        $drink_count = 0;
+                    }
+                    ?>
                     <li>
-                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span></a>
+                        <a href="./drinks.php"><i class="fa-solid fa-mug-hot"></i> <span class="nav-label">Drinks </span> <span class="label label-warning pull-right"><?php echo $drink_count; ?></span></a>
                     </li>
                     <!-- Appetizers -->
                     <li>
@@ -141,7 +189,7 @@ if ($level == 'customer') {
                     </li>
                     <!-- History -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
@@ -248,37 +296,62 @@ if ($level == 'customer') {
                         <div class="ibox-content">
                             <p>Kelola restoran makanan anda kapanpun, dimanapun. Cmiiw</p>
                             <div class="row">
-                                <div class="col-md-4 border-top border-left p-xs">
+                                <div class="col-md-4 border-top-bottom border-left p-xs">
                                     <h3> Manage Restaurants </h3>
                                     <small>Kelola restoran Anda dengan mudah. Tambahkan, edit, dan hapus informasi restoran untuk memastikan pelanggan mendapatkan pengalaman terbaik</small>
                                     <a href="./restaurants.php" class="btn btn-info btn-lg btn-block m-t">Manage Restaurants</a>
                                 </div>
-                                <div class="col-md-4 border-top border-left-right p-xs">
+                                <div class="col-md-4 border-top-bottom border-left-right p-xs">
                                     <h3> Manage Foods </h3>
                                     <small>Atur menu makanan dengan fleksibel. Tambahkan berbagai jenis hidangan, perbarui harga, dan pastikan setiap hidangan tersaji sesuai standar restoran Anda</small>
                                     <a href="./foods.php" class="btn btn-warning btn-lg btn-block m-t">Manage Foods</a>
                                 </div>
-                                <div class="col-md-4 border-top border-right p-xs">
+                                <div class="col-md-4 border-top-bottom border-right p-xs">
                                     <h3> Manage Drinks </h3>
                                     <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
                                     <a href="./drinks.php" class="btn btn-success btn-lg btn-block m-t">Manage Drinks</a>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-md-4 border-left border-top-bottom p-xs">
+                            <div class="row m-b-md m-t-md">
+                                <div class="col-md-6 border-left border-top-bottom p-xs">
                                     <h3> Manage Categories </h3>
                                     <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
                                     <a href="./categories.php" class="btn btn-outline btn-info btn-lg btn-block m-t">Manage Categories</a>
                                 </div>
-                                <div class="col-md-4 border-left-right border-top-bottom p-xs">
+                                <div class="col-md-6 border-left-right border-top-bottom p-xs">
                                     <h3> Manage Users </h3>
                                     <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="./users.php" class="btn btn-outline btn-warning btn-lg btn-block m-t">Manage Users</a>
+                                    <a href="./profile.php" class="btn btn-outline btn-warning btn-lg btn-block m-t">Manage Users</a>
                                 </div>
-                                <div class="col-md-4 border-right border-top-bottom p-xs">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 border-left border-top-bottom p-xs">
                                     <h3> Manage Customers </h3>
                                     <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
-                                    <a href="./customers.php" class="btn btn-outline btn-success btn-lg btn-block m-t">Manage Customers</a>
+                                    <a href="./profile.php" class="btn btn-success btn-lg btn-block m-t">Manage Customers</a>
+                                </div>
+                                <div class="col-md-4 border-top-bottom border-left-right p-xs">
+                                    <h3> Manage Orders </h3>
+                                    <small>Kelola restoran Anda dengan mudah. Tambahkan, edit, dan hapus informasi restoran untuk memastikan pelanggan mendapatkan pengalaman terbaik</small>
+                                    <a href="./orders.php" class="btn btn-info btn-lg btn-block m-t">Manage Orders</a>
+                                </div>
+                                <div class="col-md-4 border-top-bottom border-right p-xs">
+                                    <h3> Manage Order Details </h3>
+                                    <small>Atur menu makanan dengan fleksibel. Tambahkan berbagai jenis hidangan, perbarui harga, dan pastikan setiap hidangan tersaji sesuai standar restoran Anda</small>
+                                    <a href="./orders.php" class="btn btn-warning btn-lg btn-block m-t">Manage Order Details</a>
+                                </div>
+
+                            </div>
+                            <div class="row m-t-md m-b-md">
+                                <div class="col-md-6 border-top-bottom border-left p-xs">
+                                    <h3> Manage Payment Methods </h3>
+                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
+                                    <a href="./payments.php" class="btn btn-outline btn-success btn-lg btn-block m-t">Manage Payment Methods</a>
+                                </div>
+                                <div class="col-md-6 border-left-right border-top-bottom p-xs">
+                                    <h3> Manage Payments </h3>
+                                    <small>Kelola berbagai minuman yang ditawarkan. Tambahkan pilihan minuman baru, sesuaikan harga, dan pastikan menu minuman selalu up-to-date</small>
+                                    <a href="./payments.php" class="btn btn-outline btn-info btn-lg btn-block m-t">Manage Payments</a>
                                 </div>
                             </div>
                         </div>

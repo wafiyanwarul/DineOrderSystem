@@ -31,7 +31,7 @@ if ($level == 'customer') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Dine In Hub | Foods</title>
+    <title>Dine In Hub | Drinks</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon_io/favicon-32x32.png">
@@ -103,11 +103,11 @@ if ($level == 'customer') {
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li class="active">
@@ -124,9 +124,6 @@ if ($level == 'customer') {
                     <!-- Gallery -->
                     <li>
                         <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li><a href="contacts.html">Contacts</a></li>
-                        </ul>
                     </li>
                     <!-- Vouchers -->
                     <li>

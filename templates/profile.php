@@ -112,7 +112,7 @@ if (!$customer) {
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
@@ -124,15 +124,15 @@ if (!$customer) {
                     </li>
                     <!-- Appetizers -->
                     <li>
-                        <a href="metrics.html"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
+                        <a href="#"><i class="fa-solid fa-shrimp"></i> <span class="nav-label">Appetizers</span> </a>
                     </li>
                     <!-- Desserts -->
                     <li>
-                        <a href="widgets.html"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
+                        <a href="#"><i class="fa-solid fa-ice-cream"></i> <span class="nav-label">Desserts</span></a>
                     </li>
                     <!-- Gallery -->
                     <li>
-                        <a href="#"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
+                        <a href="./empty_page.php"><i class="fa fa-desktop"></i> <span class="nav-label">Gallery</span> <span class="pull-right label label-primary">SPECIAL</span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="contacts.html">Contacts</a></li>
                         </ul>
@@ -145,9 +145,9 @@ if (!$customer) {
                     <li>
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
-                    <!-- History -->
+                    <!-- Payments -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
@@ -308,6 +308,8 @@ if (!$customer) {
             <?php if ($level === 'admin') { ?>
                 <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
+
+                        <!-- Profile Section -->
                         <div class="col-md-4">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
@@ -317,20 +319,7 @@ if (!$customer) {
                                     <img alt="image" class="img-responsive" src="../assets/images/dine_in_hub_logo.png">
                                 </div>
                                 <div class="ibox-content profile-content">
-                                    <!-- Notification Alert UI for Multi Insert Voucher  -->
-                                    <?php if (isset($_GET['status'])) : ?>
-                                        <?php if ($_GET['status'] == 'success') : ?>
-                                            <div id="alert-data-success" class="alert alert-success alert-dismissable">
-                                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                                <span id="success-message">Data berhasil diperbarui.</span>
-                                            </div>
-                                        <?php elseif ($_GET['status'] == 'error') : ?>
-                                            <div id="alert-data-danger" class="alert alert-danger alert-dismissable">
-                                                <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                                <span id="error-message">Data gagal diperbarui.</span>
-                                            </div>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+
                                     <form id="profileForm" action="../actions/update_profile_action.php" method="post">
                                         <?php
                                         $sql_customer = "SELECT
@@ -371,7 +360,7 @@ if (!$customer) {
                                                 </div>
                                                 <div class="col-md-6">
                                                     <a href="./add_new_profile.php">
-                                                        <button type="button" class="btn btn-success btn-sm btn-block"><i class="fa fa-user"></i> Add Profile</button>
+                                                        <button type="button" class="btn btn-success btn-sm btn-block" disabled><i class="fa fa-user"></i> Add Profile</button>
                                                     </a>
                                                 </div>
                                             </div>
@@ -379,7 +368,6 @@ if (!$customer) {
                                     </form>
                                 </div>
                             </div>
-
                             <script>
                                 document.addEventListener('DOMContentLoaded', function() {
                                     const editButton = document.getElementById('editButton');
@@ -412,14 +400,13 @@ if (!$customer) {
                                     }, 3000);
                                 });
                             </script>
-
-
-
                         </div>
+
+                        <!-- Code for manage user -->
                         <div class="col-md-8">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>Activites</h5>
+                                    <h5>Manage User</h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
                                             <i class="fa fa-chevron-up"></i>
@@ -430,22 +417,197 @@ if (!$customer) {
                                     </div>
                                 </div>
                                 <div class="ibox-content">
-                                    <div>
-                                        <div class="feed-activity-list">
-                                            <!-- User Activities Here -->
-                                            <center>
-                                                <h2>No activities Here</h2>
-                                            </center>
-                                        </div>
+                                    <?php
+                                    // Query untuk mengambil data dari tabel user
+                                    $sql_users = "SELECT user_id, username, email, access_code, level FROM user";
+                                    $result_users = $koneksi->query($sql_users);
 
-                                        <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>
-                                    </div>
+                                    if ($result_users->num_rows > 0) { ?>
+                                        <form id="userForm">
+                                            <table class='table table-striped table-bordered text-center'>
+                                                <thead class='thead-dark'>
+                                                    <tr>
+                                                        <th class='text-center' width="50"><input type="checkbox" id="selectAll"></th>
+                                                        <th class='text-center' width="80">User ID</th>
+                                                        <th class='text-center'>Username</th>
+                                                        <th class='text-center'>Email</th>
+                                                        <th class='text-center'>Access Code</th>
+                                                        <th class='text-center'>Level</th>
+                                                        <th class='text-center' width="100">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php while ($row = $result_users->fetch_assoc()) { ?>
+                                                        <tr>
+                                                            <td class='text-center'><input type="checkbox" name="user_ids[]" value="<?php echo htmlspecialchars($row['user_id']); ?>"></td>
+                                                            <td class='text-center'><?php echo htmlspecialchars($row['user_id']); ?></td>
+                                                            <td class='text-center'><?php echo htmlspecialchars($row['username']); ?></td>
+                                                            <td class='text-center'><?php echo htmlspecialchars($row['email']); ?></td>
+                                                            <td class='text-center'><?php echo htmlspecialchars($row['access_code']); ?></td>
+                                                            <td class='text-center'><?php echo htmlspecialchars($row['level']); ?></td>
+                                                            <td class='text-center'>
+                                                                <a href="update_user.php?user_id=<?php echo htmlspecialchars($row['user_id']); ?>" class='btn btn-warning btn-sm'>Update</a>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </form>
+                                    <?php } else { ?>
+                                        <div class='alert alert-warning'>No users found.</div>
+                                    <?php } ?>
                                 </div>
+
+                                <!-- Script for update and delete user -->
+                                <script>
+                                    document.getElementById('selectAll').addEventListener('change', function() {
+                                        const checkboxes = document.querySelectorAll('input[name="user_ids[]"]');
+                                        for (const checkbox of checkboxes) {
+                                            checkbox.checked = this.checked;
+                                        }
+                                    });
+                                </script>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="ibox">
+                                <div class="ibox-title text-center">
+                                    <h2><strong>Manage Customer</strong></h2>
+                                </div>
+                                <div class="ibox-content">
+                                    <!-- Manage Customer Data Here -->
+                                    <?php
+                                    // Koneksi ke database
+                                    include '../includes/db_connect.php';
+
+                                    // Query untuk mengambil data dari tabel customer dan username dari tabel user
+                                    $sql_customers = "SELECT c.customer_id, c.user_id, u.username, c.phone, c.address, c.image 
+                          FROM customer c 
+                          JOIN user u ON c.user_id = u.user_id";
+                                    $result_customers = $koneksi->query($sql_customers);
+
+                                    if ($result_customers->num_rows > 0) { ?>
+                                        <form id="customerForm">
+                                            <table class='table table-striped table-bordered text-center'>
+                                                <thead class='thead-dark'>
+                                                    <tr>
+                                                        <th class='text-center' width="80">Customer ID</th>
+                                                        <th class='text-center'>User ID</th>
+                                                        <th class='text-center'>Username</th>
+                                                        <th class='text-center'>Phone</th>
+                                                        <th class='text-center'>Address</th>
+                                                        <th class='text-center'>Image</th>
+                                                        <th class='text-center'>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php while ($row = $result_customers->fetch_assoc()) { ?>
+                                                        <tr>
+                                                            <td class='text-center'><input type="text" class="form-control" value="<?php echo htmlspecialchars($row['customer_id']); ?>" disabled></td>
+                                                            <td class='text-center'><input type="text" class="form-control" value="<?php echo htmlspecialchars($row['user_id']); ?>" disabled></td>
+                                                            <td class='text-center'><input type="text" class="form-control username" value="<?php echo htmlspecialchars($row['username']); ?>" disabled></td>
+                                                            <td class='text-center'><input type="text" class="form-control phone" value="<?php echo htmlspecialchars($row['phone']); ?>" disabled></td>
+                                                            <td class='text-center'><input type="text" class="form-control" value="<?php echo htmlspecialchars($row['address']); ?>" disabled></td>
+                                                            <td class='text-center'>
+                                                                <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Customer Image" style="width: 50px; height: auto;">
+                                                            </td>
+                                                            <td class='text-center'>
+                                                                <button type="button" class="btn btn-warning btn-sm edit-btn">Edit</button>
+                                                                <button type="button" class="btn btn-success btn-sm save-btn" disabled>Save</button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>
+                                                </tbody>
+                                            </table>
+                                        </form>
+                                    <?php } else { ?>
+                                        <div class='alert alert-warning'>No customers found.</div>
+                                    <?php } ?>
+                                </div>
+
+                                <!-- Script for enabling and saving changes -->
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const editButtons = document.querySelectorAll('.edit-btn');
+                                        const saveButtons = document.querySelectorAll('.save-btn');
+
+                                        editButtons.forEach((editButton, index) => {
+                                            editButton.addEventListener('click', () => {
+                                                const row = editButton.closest('tr');
+                                                const usernameField = row.querySelector('.username');
+                                                const phoneField = row.querySelector('.phone');
+                                                const saveButton = row.querySelector('.save-btn');
+
+                                                usernameField.disabled = false;
+                                                phoneField.disabled = false;
+                                                saveButton.disabled = false;
+                                                editButton.disabled = true;
+                                            });
+                                        });
+
+                                        saveButtons.forEach((saveButton, index) => {
+                                            saveButton.addEventListener('click', () => {
+                                                const row = saveButton.closest('tr');
+                                                const customerId = row.querySelector('input').value;
+                                                const usernameField = row.querySelector('.username');
+                                                const phoneField = row.querySelector('.phone');
+                                                const editButton = row.querySelector('.edit-btn');
+
+                                                const formData = new FormData();
+                                                formData.append('customer_id', customerId);
+                                                formData.append('username', usernameField.value);
+                                                formData.append('phone', phoneField.value);
+
+                                                fetch('../actions/update_customer.php', {
+                                                        method: 'POST',
+                                                        body: formData
+                                                    })
+                                                    .then(response => response.text())
+                                                    .then(result => {
+                                                        if (result === 'success') {
+                                                            alert('Customer updated successfully.');
+                                                            usernameField.disabled = true;
+                                                            phoneField.disabled = true;
+                                                            saveButton.disabled = true;
+                                                            editButton.disabled = false;
+                                                        } else {
+                                                            alert('Failed to update customer.');
+                                                        }
+                                                    })
+                                                    .catch(error => console.error('Error:', error));
+                                            });
+                                        });
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
                 </div>
+
             <?php } elseif ($level == 'customer') { ?>
+                <?php // Query untuk mendapatkan data customer
+                $sql_customer = "SELECT
+                                    customer.customer_id,
+                                    customer.user_id,
+                                    customer.phone,
+                                    customer.address,
+                                    customer.image,
+                                    user.username
+                                FROM
+                                    customer
+                                JOIN
+                                    user ON customer.user_id = user.user_id
+                                WHERE
+                                    user.username = '$username'";
+                $result = $koneksi->query($sql_customer);
+                $customer = $result->fetch_assoc();
+                $phone = htmlspecialchars($customer['phone'] ?? '');
+                $address = htmlspecialchars($customer['address'] ?? '');
+                $image = htmlspecialchars($customer['image'] ?? '');
+                $edit_disabled = ($phone === '' && $address === '') ? 'disabled' : '';
+                ?>
                 <div class="wrapper wrapper-content animated fadeInRight">
                     <div class="row">
                         <div class="col-md-4">
@@ -454,47 +616,88 @@ if (!$customer) {
                                     <h5>Profile Detail</h5>
                                 </div>
                                 <div class="ibox-content no-padding border-left-right">
-                                    <img alt="image" class="img-responsive" src="../assets/inspinia/img/profile_big.jpg">
+                                    <img alt="image" class="img-container" src="<?php echo !empty($image) ? $image : '../assets/inspinia/img/profile_big.jpg'; ?>" id="profileImage">
                                 </div>
                                 <div class="ibox-content profile-content">
-                                    <!-- Notification Alert UI for Multi Insert Voucher  -->
-                                    <div id="alert-data-success" class="alert alert-success alert-dismissable" style="display: none;">
-                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                        <span id="success-message">Data berhasil diperbarui.</span>
-                                    </div>
-                                    <div id="alert-data-danger" class="alert alert-danger alert-dismissable" style="display: none;">
-                                        <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-                                        <span id="error-message">Data gagal diperbarui.</span>
-                                    </div>
+                                    <!-- Notification Alert UI -->
+                                    <?php if (isset($_SESSION['success_message'])) : ?>
+                                        <div id="alert-data-success" class="alert alert-success alert-dismissable">
+                                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                            <span id="success-message"><?php echo $_SESSION['success_message']; ?></span>
+                                        </div>
+                                        <?php unset($_SESSION['success_message']); ?>
+                                    <?php endif; ?>
+                                    <?php if (isset($_SESSION['error_message'])) : ?>
+                                        <div id="alert-data-danger" class="alert alert-danger alert-dismissable">
+                                            <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+                                            <span id="error-message"><?php echo $_SESSION['error_message']; ?></span>
+                                        </div>
+                                        <?php unset($_SESSION['error_message']); ?>
+                                    <?php endif; ?>
+
+                                    <!-- Form untuk mengunggah gambar profil -->
+                                    <form id="uploadProfileImageForm" action="../actions/upload_profile_image.php" method="post" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="profile_picture">Profile Picture</label>
+                                            <input type="file" class="form-control" id="profile_picture" name="profile_picture" accept="image/*">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm btn-block">Upload Profile Picture</button>
+                                    </form>
+
+                                    <!-- Form untuk memperbarui phone dan address -->
                                     <form id="profileForm" action="../actions/update_profile_action.php" method="post">
                                         <div class="form-group">
                                             <label for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($customer['username']); ?>" disabled>
+                                            <input type="text" class="form-control" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>" disabled>
                                         </div>
-                                        <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($customer['user_id']); ?>">
-
                                         <div class="form-group">
                                             <label for="phone">Phone</label>
-                                            <input type="text" class="form-control" id="phone" name="phone" value="<?php echo htmlspecialchars($customer['phone']); ?>" disabled>
+                                            <input type="text" class="form-control" id="phone" name="phone" value="<?php echo $phone; ?>" disabled>
                                         </div>
                                         <div class="form-group">
                                             <label for="address">Address</label>
-                                            <textarea class="form-control" id="address" name="address" disabled><?php echo htmlspecialchars($customer['address']); ?></textarea>
+                                            <textarea class="form-control" id="address" name="address" disabled><?php echo $address; ?></textarea>
                                         </div>
                                         <div class="user-button">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <button type="button" id="editButton" class="btn btn-primary btn-sm btn-block"><i class="fa fa-pencil"></i> Edit Profile</button>
-                                                    <button type="submit" id="saveButton" class="btn btn-primary btn-sm btn-block" style="display: none;"><i class="fa fa-save"></i> Save</button>
+                                                    <button type="button" id="editButton" class="btn btn-primary btn-sm btn-block" <?php echo $edit_disabled; ?>>Edit</button>
+                                                    <button type="submit" id="saveButton" class="btn btn-primary btn-sm btn-block" style="display: none;">Save</button>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <button type="button" class="btn btn-default btn-sm btn-block"><i class="fa fa-coffee"></i> Buy a coffee</button>
+                                                    <a href="./add_new_profile.php">
+                                                        <button type="button" class="btn btn-success btn-sm btn-block"><i class="fa fa-user"></i> Add Profile</button>
+                                                    </a>
+                                                    <?php if (!empty($image)) : ?>
+                                                        <a href="<?php echo $image; ?>" download>
+                                                            <button type="button" class="btn btn-info btn-sm btn-block"><i class="fa fa-download"></i> Download Profile Picture</button>
+                                                        </a>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
+
                             </div>
+
+                            <!-- Script For Image Preview -->
+                            <script>
+                                document.getElementById('profile_picture').addEventListener('change', function(event) {
+                                    const [file] = event.target.files;
+                                    if (file) {
+                                        document.getElementById('profileImage').src = URL.createObjectURL(file);
+                                    }
+                                });
+
+                                document.getElementById('editButton').addEventListener('click', function() {
+                                    document.getElementById('phone').disabled = false;
+                                    document.getElementById('address').disabled = false;
+                                    document.getElementById('saveButton').style.display = 'block';
+                                    this.style.display = 'none';
+                                });
+                            </script>
+
                         </div>
 
                         <div class="col-md-8">

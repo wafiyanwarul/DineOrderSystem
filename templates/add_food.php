@@ -103,11 +103,11 @@ if ($level == 'customer') {
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li class="active">
-                        <a href="layouts.html"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
+                        <a href="./foods.php"><i class="fa-solid fa-burger"></i> <span class="nav-label">Foods</span></a>
                     </li>
                     <!-- Drinks -->
                     <li>

@@ -29,20 +29,6 @@ if ($level == 'customer') {
     $role = 'Unknown';
 }
 
-// Mengambil semua data dari tabel restaurant
-$sql_restaurant = "SELECT restaurant_id, restaurant_name, address, phone, description, image FROM restaurant";
-$result_restaurant = $koneksi->query($sql_restaurant);
-
-if (!$result_restaurant) {
-    die("Error executing restaurant query: " . $koneksi->error);
-}
-
-$restaurants = [];
-if ($result_restaurant->num_rows > 0) {
-    while ($row = $result_restaurant->fetch_assoc()) {
-        $restaurants[] = $row;
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +56,9 @@ if ($result_restaurant->num_rows > 0) {
     <link href="../assets/inspinia/css/animate.css" rel="stylesheet">
     <link href="../assets/inspinia/css/style.css" rel="stylesheet">
 
+    <!-- Blueimp Gallery Plugins -->
+    <link href="../assets/inspinia/css/plugins/blueimp/css/blueimp-gallery.min.css" rel="stylesheet">
+
     <!-- Toastr style -->
     <link href="../assets/inspinia/css/plugins/toastr/toastr.min.css" rel="stylesheet">
 
@@ -78,6 +67,22 @@ if ($result_restaurant->num_rows > 0) {
 
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/ce1fc2061c.js" crossorigin="anonymous"></script>
+    <style>
+        .image-container {
+            display: inline-block;
+            margin: 5px;
+            width: 100px;
+            /* Ukuran yang diinginkan untuk lebar */
+            height: 100px;
+            /* Ukuran yang diinginkan untuk tinggi */
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 
 </head>
 
@@ -121,7 +126,7 @@ if ($result_restaurant->num_rows > 0) {
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li>
@@ -151,9 +156,9 @@ if ($result_restaurant->num_rows > 0) {
                     <li>
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
-                    <!-- History -->
+                    <!-- Payments -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
@@ -230,7 +235,7 @@ if ($result_restaurant->num_rows > 0) {
                     </ul>
                 </nav>
             </div>
-            
+
             <!-- Header Content -->
             <div class="row wrapper border-bottom white-bg page-heading">
                 <div class="col-sm-4">
@@ -253,12 +258,52 @@ if ($result_restaurant->num_rows > 0) {
 
             <!-- Main Content -->
             <div class="wrapper wrapper-content">
-                <div class="middle-box text-center animated fadeInRightBig">
-                    <h3 class="font-bold">This page is empty</h3>
-                    <div class="error-desc">
-                        You can create here any grid layout you want. And any variation layout you imagine:) Check out
-                        main dashboard and other site. It use many different layout.
-                        <br /><a href="./dashboard.php" class="btn btn-primary btn-block dim m-t">Dashboard</a>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content">
+
+                                <h2>Foods Gallery</h2>
+                                <p>
+                                    <strong>blueimp Gallery</strong> is a touch-enabled, responsive and customizable image & video gallery, carousel and lightbox, optimized for both mobile and desktop web browsers.
+                                </p>
+
+                                <div class="lightBoxGallery">
+                                    <?php
+                                    // Query untuk mengambil data dari tabel food
+                                    $sql_imagefood = "SELECT image FROM food";
+                                    $result_imagefood = $koneksi->query($sql_imagefood);
+
+                                    // Jika hasil query tidak kosong
+                                    if ($result_imagefood->num_rows > 0) {
+                                        // Loop untuk menampilkan setiap gambar dari field image
+                                        while ($row = $result_imagefood->fetch_assoc()) {
+                                            $image_path = $row["image"];
+                                            echo '<div class="image-container"><a href="' . $image_path . '" title="Image from Dine In Hub" data-gallery=""><img src="' . $image_path . '"></a></div>';
+                                        }
+                                    } else {
+                                        echo "0 results";
+                                    }
+                                    ?>
+                                </div>
+                                <!-- <a href="../assets/inspinia/img/gallery/1.jpg" title="Image from Unsplash" data-gallery=""><img src="../assets/inspinia/img/gallery/1s.jpg"></a>
+                                    <a href="../assets/inspinia/img/gallery/2.jpg" title="Image from Unsplash" data-gallery=""><img src="../assets/inspinia/img/gallery/2s.jpg"></a> -->
+
+                                <!-- The Gallery as lightbox dialog, should be a child element of the document body -->
+                                <div id="blueimp-gallery" class="blueimp-gallery">
+                                    <div class="slides"></div>
+                                    <h3 class="title"></h3>
+                                    <a class="prev">‹</a>
+                                    <a class="next">›</a>
+                                    <a class="close">×</a>
+                                    <a class="play-pause"></a>
+                                    <ol class="indicator"></ol>
+                                </div>
+
+                                <!-- </div> -->
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -289,6 +334,9 @@ if ($result_restaurant->num_rows > 0) {
             }, 1300);
         });
     </script>
+
+    <!-- blueimp gallery -->
+    <script src="../assets/inspinia/js/plugins/blueimp/jquery.blueimp-gallery.min.js"></script>
 
     <!-- Mainly scripts -->
     <script src="../assets/inspinia/js/jquery-3.1.1.min.js"></script>

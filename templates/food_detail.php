@@ -148,7 +148,7 @@ $food = $result->fetch_assoc();
                     </li>
                     <!-- All Menu -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
+                        <a href="./categories.php"><i class="fa-solid fa-table-list"></i> <span class="nav-label">All Menu</span></a>
                     </li>
                     <!-- Foods -->
                     <li class="active">
@@ -181,9 +181,9 @@ $food = $result->fetch_assoc();
                     <li>
                         <a href="./orders.php"><i class="fa-solid fa-cart-flatbed-suitcase"></i> <span class="nav-label">Orders</span></a>
                     </li>
-                    <!-- History -->
+                    <!-- Payments -->
                     <li>
-                        <a href="layouts.html"><i class="fa-solid fa-file-waveform"></i> <span class="nav-label">History</span></a>
+                        <a href="./payments.php"><i class="fa-solid fa-money-bill"></i> <span class="nav-label">Payments</span></a>
                     </li>
                     <!-- Ratings -->
                     <li>
@@ -292,6 +292,7 @@ $food = $result->fetch_assoc();
                                     </div>
                                 </div>
                                 <div class="ibox-content">
+                                    <!-- Notification Alert -->
                                     <div id="alert-data-success" class="alert alert-success alert-dismissable" style="display: none;">
                                         <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
                                         Data Makanan <a class="alert-link" href="#" id="alert-data-success-link"><?php echo htmlspecialchars($food['food_name']); ?></a> berhasil diperbarui.
@@ -327,7 +328,7 @@ $food = $result->fetch_assoc();
                                             </select>
                                         </div>
                                         <div class="form-group">
-                                            <label for="category_id">Nama Restoran:</label>
+                                            <label for="category_id">Jenis Menu:</label>
                                             <select id="category_id" name="category_id" class="form-control" <?php echo $role === 'Admin' ? '' : 'disabled'; ?>>
                                                 <?php
                                                 // Query untuk mengambil semua nama restoran
@@ -360,6 +361,7 @@ $food = $result->fetch_assoc();
                                 </div>
                             </div>
 
+                            <!-- For Food Image Update -->
                             <div class="ibox btn-block float-e-margins">
                                 <div class="ibox-title bg-primary" style="display: flex; align-items: center; justify-content: space-between;">
                                     <h2 class="m-b-sm">Update Gambar: <strong id="food-image-display"><?php echo htmlspecialchars($food['food_name']); ?></strong></h2>
